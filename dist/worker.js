@@ -199,11 +199,11 @@ const INDEX_HTML = `<!DOCTYPE html>
     }
 
     .search-filter {
-      margin-top: 32px;
+      margin-top: 48px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 16px;
+      gap: 20px;
     }
 
     .search-box {
