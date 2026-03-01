@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { chromium } from 'playwright';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -6,31 +7,23 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const INDEX_PATH = path.join(__dirname, 'index.html');
 
-const CLAWHUB_API = 'https://api.clawhub.ai/skills';
-const TOP_SKILLS_COUNT = 20;
+const icons = {
+  'AI/ML': '🧠',
+  'Developer Tools': '🔧',
+  'Productivity': '⚡',
+  'Data': '📊',
+  'Automation': '🤖',
+  'Search': '🔍',
+  'default': '📦'
+};
 
-async function fetchSkills() {
-  try {
-    const response = await fetch(`${CLAWHUB_API}?sort=downloads&limit=${TOP_SKILLS_COUNT}`);
-    if (!response.ok) throw new Error('Failed to fetch');
-    const data = await response.json();
-    return data.skills || [];
-  } catch (error) {
-    console.error('Error fetching skills:', error.message);
-    return null;
-  }
+function formatNumber(num) {
+  if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+  if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+  return num.toString();
 }
 
 function generateSkillCard(skill, rank) {
-  const icons = {
-    'AI/ML': '🧠',
-    'Developer Tools': '🔧',
-    'Productivity': '⚡',
-    'Data': '📊',
-    'Automation': '🤖',
-    'default': '📦'
-  };
-  
   const icon = icons[skill.category] || icons.default;
   
   return `      <article class="skill-card">
@@ -55,48 +48,106 @@ function generateSkillCard(skill, rank) {
       </article>`;
 }
 
-function formatNumber(num) {
-  if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-  if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-  return num.toString();
-}
+async function scrapeAndUpdate() {
+  const browser = await chromium.launch({ headless: true });
+  const page = await browser.newPage();
+  
+  try {
+    await page.goto('https://clawhub.ai/', {
+      waitUntil: 'networkidle',
+      timeout: 30000
+    });
 
-async function updateData() {
-  const skills = await fetchSkills();
-  if (!skills) {
-    console.log('Using existing data (fetch failed)');
-    return;
-  }
-  
-  let html = fs.readFileSync(INDEX_PATH, 'utf-8');
-  
-  const skillsGridMatch = html.match(/<div class="skills-grid" id="skillsGrid">[\s\S]*?<\/div>\s*<\/div>\s*<\/header>/);
-  if (!skillsGridMatch) {
-    console.error('Could not find skills grid in HTML');
-    return;
-  }
-  
-  const skillsCards = skills.map((skill, i) => generateSkillCard(i + 1)).join('\n');
-  const newSkillsGrid = `<div class="skills-grid" id="skillsGrid">
+    await page.waitForSelector('.skill-card', { timeout: 15000 });
+
+    const skills = await page.evaluate(() => {
+      const cards = document.querySelectorAll('.skill-card');
+      const skillData = [];
+
+      const parseNum = (text) => {
+        if (!text) return 0;
+        const upperText = text.toUpperCase();
+        const num = parseFloat(text.replace(/,/g, ''));
+        if (upperText.includes('K')) return Math.round(num * 1000);
+        if (upperText.includes('M')) return Math.round(num * 1000000);
+        if (upperText.includes('B')) return Math.round(num * 1000000000);
+        return Math.round(num);
+      };
+
+      cards.forEach(card => {
+        const href = card.getAttribute('href');
+        const slug = href.replace('/', '');
+        
+        const titleEl = card.querySelector('.skill-card-title');
+        const name = titleEl?.textContent?.trim() || '';
+        
+        const summaryEl = card.querySelector('.skill-card-summary');
+        const description = summaryEl?.textContent?.trim() || '';
+
+        const authorEl = card.querySelector('.user-handle');
+        const author = authorEl?.textContent?.trim().replace('@', '') || 'unknown';
+
+        const footerText = card.querySelector('.skill-card-footer')?.textContent || '';
+        
+        const downloadMatch = footerText.match(/([\d,]+\.?\d*)K/i);
+        const downloads = downloadMatch ? Math.round(parseFloat(downloadMatch[1]) * 1000) : 0;
+
+        const starsMatch = footerText.match(/⭐\s*([\d,]+)/);
+        const stars = starsMatch ? parseInt(starsMatch[1].replace(/,/g, '')) : 0;
+
+        skillData.push({
+          slug,
+          name,
+          description,
+          downloads,
+          stars,
+          author,
+          category: 'Utility'
+        });
+      });
+
+      return skillData;
+    });
+
+    let html = fs.readFileSync(INDEX_PATH, 'utf-8');
+    
+    const skillsGridMatch = html.match(/<div class="skills-grid" id="skillsGrid">[\s\S]*?<\/div>\s*<\/div>\s*<div class="terminal-hint">/);
+    if (!skillsGridMatch) {
+      console.error('Could not find skills grid in HTML');
+      return;
+    }
+    
+    const skillsCards = skills.map((skill, i) => generateSkillCard(skill, i + 1)).join('\n');
+    const newSkillsGrid = `<div class="skills-grid" id="skillsGrid">
 ${skillsCards}
-      </div>
-    </header>`;
-  
-  html = html.replace(skillsGridMatch[0], newSkillsGrid);
-  
-  const today = new Date().toISOString().split('T')[0];
-  html = html.replace(/Updated \d{4}-\d{2}-\d{2}/, `Updated ${today}`);
-  
-  const totalSkills = skills.length;
-  const totalDownloads = skills.reduce((sum, s) => sum + s.downloads, 0);
-  const totalStars = skills.reduce((sum, s) => sum + s.stars, 0);
-  
-  html = html.replace(/Total Skills.*?\d+\.?\d*[KM]?\+/, `Total Skills · ${formatNumber(totalSkills)}+`);
-  html = html.replace(/Downloads.*?\d+\.?\d*[KM]?\+/, `Downloads · ${formatNumber(totalDownloads)}+`);
-  html = html.replace(/Stars.*?\d+\.?\d*[KM]?\+/, `Stars · ${formatNumber(totalStars)}+`);
-  
-  fs.writeFileSync(INDEX_PATH, html);
-  console.log(`Updated ${skills.length} skills`);
+    </div>
+  </div>
+
+  <div class="terminal-hint">`;
+    
+    html = html.replace(skillsGridMatch[0], newSkillsGrid);
+    
+    const today = new Date().toISOString().split('T')[0];
+    html = html.replace(/Updated \d{4}-\d{2}-\d{2}/, `Updated ${today}`);
+    
+    const totalSkills = skills.length;
+    const totalDownloads = skills.reduce((sum, s) => sum + s.downloads, 0);
+    const totalStars = skills.reduce((sum, s) => sum + s.stars, 0);
+
+    html = html.replace(/>\d+\.?\d*[KM]?\+</,
+      `>${formatNumber(totalSkills)}<`);
+    html = html.replace(/>\d+\.?\d*[KM]?\+</,
+      `>${formatNumber(totalDownloads)}<`);
+    html = html.replace(/>\d+\.?\d*[KM]?\+</,
+      `>${formatNumber(totalStars)}<`);
+    
+    fs.writeFileSync(INDEX_PATH, html);
+    console.log(`Updated ${skills.length} skills from homepage`);
+  } catch (error) {
+    console.error('Error:', error.message);
+  } finally {
+    await browser.close();
+  }
 }
 
-updateData();
+scrapeAndUpdate();

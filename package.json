@@ -5,5 +5,8 @@
     "build": "node build.mjs",
     "update-data": "node update-data.mjs",
     "deploy": "wrangler deploy dist/worker.js --name opendown"
+  },
+  "devDependencies": {
+    "playwright": "^1.58.2"
   }
 }
