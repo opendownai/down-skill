@@ -4,7 +4,8 @@ const INDEX_HTML = `<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OpenDown - ClawHub Top Skills</title>
-  <link rel="icon" type="image/svg+xml" href="/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="https://cdn.opendown.ai/favicon.ico">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -125,6 +126,13 @@ const INDEX_HTML = `<!DOCTYPE html>
     @keyframes blink {
       0%, 100% { opacity: 1; }
       50% { opacity: 0.3; }
+    }
+
+    .logo {
+      display: block;
+      margin: 0 auto 16px;
+      height: 48px;
+      animation: float 6s ease-in-out infinite;
     }
 
     h1 {
@@ -339,7 +347,7 @@ const INDEX_HTML = `<!DOCTYPE html>
 
     footer {
       text-align: center;
-      padding: 40px 24px;
+      padding: 80px 24px;
       color: var(--text-secondary);
       font-size: 14px;
     }
@@ -362,9 +370,8 @@ const INDEX_HTML = `<!DOCTYPE html>
         grid-template-columns: 1fr;
       }
 
-      .terminal-hint {
-        display: none;
-      }
+    .terminal-hint {
+      display: none;
     }
   </style>
 </head>
@@ -375,6 +382,7 @@ const INDEX_HTML = `<!DOCTYPE html>
 
   <div class="container">
     <header>
+      <img class="logo" src="https://cdn.opendown.ai/opendown-logo.png" alt="OpenDown">
       <div class="badge"><span class="badge-dot"></span>Live Data · Updated 2026-03-01</div>
       <h1>OpenDown</h1>
       <p class="subtitle">ClawHub Top Skills — Curated collection of the most popular AI Agent skills to supercharge your OpenClaw. Based on real download statistics.</p>
@@ -613,7 +621,7 @@ const INDEX_HTML = `<!DOCTYPE html>
   </div>
 
   <footer>
-    <p><a href="https://opendown.ai/docs" target="_blank">Documentation</a> | Contact: <a href="mailto:support@opendown.ai">support@opendown.ai</a></p>
+    <p><a href="https://github.com/opendownai" target="_blank">GitHub</a> | <a href="https://opendown.ai/docs" target="_blank">Docs</a> | <a href="https://www.buymeacoffee.com/opendown" target="_blank">Buy Me a Coffee</a> | Contact: <a href="mailto:support@opendown.ai">support@opendown.ai</a></p>
   </footer>
 </body>
 </html>
@@ -621,8 +629,6 @@ const INDEX_HTML = `<!DOCTYPE html>
 
 const DOCS_URL = "opendown.mintlify.dev";
 const CUSTOM_URL = "opendown.ai";
-
-const FAVICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="#0a0a0f" width="100" height="100" rx="20"/><circle cx="50" cy="40" r="12" fill="#00f5ff"/><circle cx="35" cy="55" r="6" fill="#00f5ff"/><circle cx="65" cy="55" r="6" fill="#00f5ff"/><rect x="30" y="70" width="40" height="4" rx="2" fill="#8b5cf6"/><rect x="38" y="78" width="24" height="4" rx="2" fill="#8b5cf6"/></svg>`;
 
 addEventListener("fetch", (event) => {
   event.respondWith(handleRequest(event.request));
@@ -632,9 +638,7 @@ async function handleRequest(request) {
   const urlObject = new URL(request.url);
 
   if (urlObject.pathname === "/favicon.ico") {
-    return new Response(FAVICON_SVG, { 
-      headers: { "Content-Type": "image/svg+xml", "Cache-Control": "public, max-age=86400" } 
-    });
+    return fetch("https://cdn.opendown.ai/favicon.ico");
   }
 
   if (/^\/docs/.test(urlObject.pathname)) {
