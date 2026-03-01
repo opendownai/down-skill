@@ -4,7 +4,26 @@ const INDEX_HTML = `<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OpenDown - ClawHub Top Skills</title>
+  <meta name="description" content="Discover the most popular AI Agent skills for OpenClaw. Browse curated top skills with real download statistics from ClawHub.">
+  <meta name="keywords" content="OpenClaw, AI Agent, Skills, Plugins, Extensions, Downloads">
+  
+  <meta property="og:title" content="OpenDown - ClawHub Top Skills">
+  <meta property="og:description" content="Discover the most popular AI Agent skills for OpenClaw. Based on real download statistics.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://opendown.ai">
+  <meta property="og:image" content="https://cdn.opendown.ai/opendown-logo.png">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="OpenDown - ClawHub Top Skills">
+  <meta name="twitter:description" content="Discover the most popular AI Agent skills for OpenClaw.">
+  <meta name="twitter:image" content="https://cdn.opendown.ai/opendown-logo.png">
+  
   <link rel="icon" type="image/x-icon" href="https://cdn.opendown.ai/favicon.ico">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0a0a0f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="OpenDown">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -177,6 +196,89 @@ const INDEX_HTML = `<!DOCTYPE html>
       font-size: 14px;
       color: var(--text-secondary);
       margin-top: 4px;
+    }
+
+    .search-filter {
+      margin-top: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .search-box {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 16px 12px 44px;
+      background: var(--bg-secondary);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-size: 16px;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent-cyan);
+      box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.1);
+    }
+
+    .search-box input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .search-box svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      color: var(--text-secondary);
+    }
+
+    .category-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .category-btn {
+      padding: 8px 16px;
+      background: var(--bg-secondary);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 100px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .category-btn:hover {
+      border-color: var(--accent-cyan);
+      color: var(--text-primary);
+    }
+
+    .category-btn.active {
+      background: linear-gradient(135deg, rgba(0, 245, 255, 0.2), rgba(139, 92, 246, 0.2));
+      border-color: var(--accent-cyan);
+      color: var(--accent-cyan);
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-secondary);
+      grid-column: 1 / -1;
     }
 
     .skills-grid {
@@ -362,16 +464,80 @@ const INDEX_HTML = `<!DOCTYPE html>
     }
 
     @media (max-width: 768px) {
+      body {
+        padding: 0 16px;
+      }
+      
+      .container {
+        padding: 40px 16px;
+      }
+      
+      header {
+        margin-bottom: 48px;
+      }
+      
+      .logo {
+        height: 36px;
+      }
+      
+      h1 {
+        font-size: 32px;
+        letter-spacing: -1px;
+      }
+      
+      .subtitle {
+        font-size: 15px;
+        padding: 0 8px;
+      }
+      
       .stats-bar {
-        gap: 24px;
+        gap: 16px;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .stat-item {
+        min-width: 80px;
+      }
+      
+      .stat-value {
+        font-size: 20px;
+      }
+      
+      .skill-card {
+        padding: 20px;
       }
       
       .skills-grid {
         grid-template-columns: 1fr;
+        gap: 16px;
       }
 
-    .terminal-hint {
-      display: none;
+      .terminal-hint {
+        display: none;
+      }
+      
+      footer {
+        padding: 40px 16px;
+      }
+      
+      footer p {
+        font-size: 12px;
+        line-height: 1.8;
+      }
+      
+      .search-box {
+        max-width: 100%;
+      }
+      
+      .category-filters {
+        padding: 0 8px;
+      }
+      
+      .category-btn {
+        padding: 6px 12px;
+        font-size: 13px;
+      }
     }
   </style>
 </head>
@@ -403,7 +569,25 @@ const INDEX_HTML = `<!DOCTYPE html>
       </div>
     </header>
 
-    <div class="skills-grid">
+    <div class="search-filter">
+      <div class="search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="M21 21l-4.35-4.35"/>
+        </svg>
+        <input type="text" id="searchInput" placeholder="Search skills...">
+      </div>
+      <div class="category-filters" id="categoryFilters">
+        <button class="category-btn active" data-category="all">All</button>
+        <button class="category-btn" data-category="AI/ML">AI/ML</button>
+        <button class="category-btn" data-category="Developer Tools">Dev Tools</button>
+        <button class="category-btn" data-category="Productivity">Productivity</button>
+        <button class="category-btn" data-category="Data">Data</button>
+        <button class="category-btn" data-category="Automation">Automation</button>
+      </div>
+    </div>
+
+    <div class="skills-grid" id="skillsGrid">
       <article class="skill-card">
         <span class="skill-rank">#1</span>
         <div class="skill-icon">🧠</div>
@@ -623,6 +807,70 @@ const INDEX_HTML = `<!DOCTYPE html>
   <footer>
     <p><a href="https://github.com/opendownai" target="_blank">GitHub</a> | <a href="https://discord.gg/gjGb5WEz" target="_blank">Discord</a> | <a href="https://opendown.ai/docs" target="_blank">Docs</a> | <a href="https://www.buymeacoffee.com/opendown" target="_blank">Buy Me a Coffee</a> | Contact: <a href="mailto:support@opendown.ai">support@opendown.ai</a></p>
   </footer>
+  <script>
+    const skillsGrid = document.getElementById('skillsGrid');
+    const searchInput = document.getElementById('searchInput');
+    const categoryBtns = document.querySelectorAll('.category-btn');
+    
+    let allSkills = [];
+    
+    function init() {
+      const skillCards = document.querySelectorAll('#skillsGrid .skill-card');
+      allSkills = Array.from(skillCards).map((card, index) => {
+        const category = card.querySelector('.category-tag').textContent.trim();
+        const name = card.querySelector('.skill-name a').textContent.trim();
+        const desc = card.querySelector('.skill-desc').textContent.trim();
+        return { card, category, name, desc, index };
+      });
+      
+      searchInput.addEventListener('input', filterSkills);
+      categoryBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          categoryBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          filterSkills();
+        });
+      });
+    }
+    
+    function filterSkills() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const activeCategory = document.querySelector('.category-btn.active').dataset.category;
+      
+      let visibleCount = 0;
+      allSkills.forEach(skill => {
+        const matchesSearch = skill.name.toLowerCase().includes(searchTerm) || 
+                              skill.desc.toLowerCase().includes(searchTerm);
+        const matchesCategory = activeCategory === 'all' || skill.category === activeCategory;
+        
+        if (matchesSearch && matchesCategory) {
+          skill.card.style.display = '';
+          visibleCount++;
+        } else {
+          skill.card.style.display = 'none';
+        }
+      });
+      
+      const existingNoResults = skillsGrid.querySelector('.no-results');
+      if (existingNoResults) existingNoResults.remove();
+      
+      if (visibleCount === 0) {
+        const noResults = document.createElement('div');
+        noResults.className = 'no-results';
+        noResults.innerHTML = \`
+          <p>No skills found matching your search.</p>
+          <p style="margin-top: 8px; font-size: 14px;">Try different keywords or categories.</p>
+        \`;
+        skillsGrid.appendChild(noResults);
+      }
+    }
+    
+    document.addEventListener('DOMContentLoaded', init);
+    
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js');
+    }
+  </script>
 </body>
 </html>
 `;
