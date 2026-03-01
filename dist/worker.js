@@ -621,7 +621,7 @@ const INDEX_HTML = `<!DOCTYPE html>
   </div>
 
   <footer>
-    <p><a href="https://github.com/opendownai" target="_blank">GitHub</a> | <a href="https://opendown.ai/docs" target="_blank">Docs</a> | <a href="https://www.buymeacoffee.com/opendown" target="_blank">Buy Me a Coffee</a> | Contact: <a href="mailto:support@opendown.ai">support@opendown.ai</a></p>
+    <p><a href="https://github.com/opendownai" target="_blank">GitHub</a> | <a href="https://discord.gg/gjGb5WEz" target="_blank">Discord</a> | <a href="https://opendown.ai/docs" target="_blank">Docs</a> | <a href="https://www.buymeacoffee.com/opendown" target="_blank">Buy Me a Coffee</a> | Contact: <a href="mailto:support@opendown.ai">support@opendown.ai</a></p>
   </footer>
 </body>
 </html>
