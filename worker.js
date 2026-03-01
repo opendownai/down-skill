@@ -198,13 +198,6 @@ addEventListener("fetch", (event) => {
 async function handleRequest(request) {
   const urlObject = new URL(request.url);
 
-  if (urlObject.pathname === "/opendown-ai.jpg") {
-    return new Response("Redirect to logo", { 
-      status: 302,
-      headers: { "Location": "https://opendown.ai/logo.jpg" } 
-    });
-  }
-
   if (urlObject.pathname === "/favicon.ico") {
     return new Response(FAVICON_SVG, { 
       headers: { "Content-Type": "image/svg+xml", "Cache-Control": "public, max-age=86400" } 

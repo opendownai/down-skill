@@ -375,7 +375,8 @@ const INDEX_HTML = `<!DOCTYPE html>
 
   <div class="container">
     <header>
-      <img src="/opendown-ai.jpg" alt="OpenDown" style="width:80px;height:80px;border-radius:16px;margin-bottom:16px;">
+      <div class="badge"><span class="badge-dot"></span>Live Data · Updated 2026-03-01</div>
+      <h1>OpenDown</h1>
       <p class="subtitle">ClawHub Top Skills — Curated collection of the most popular AI Agent skills to supercharge your OpenClaw. Based on real download statistics.</p>
       
       <div class="stats-bar">
@@ -629,13 +630,6 @@ addEventListener("fetch", (event) => {
 
 async function handleRequest(request) {
   const urlObject = new URL(request.url);
-
-  if (urlObject.pathname === "/opendown-ai.jpg") {
-    return new Response("Redirect to logo", { 
-      status: 302,
-      headers: { "Location": "https://opendown.ai/logo.jpg" } 
-    });
-  }
 
   if (urlObject.pathname === "/favicon.ico") {
     return new Response(FAVICON_SVG, { 
