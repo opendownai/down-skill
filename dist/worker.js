@@ -285,6 +285,7 @@ const INDEX_HTML = `<!DOCTYPE html>
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
       gap: 24px;
+      margin-top: 40px;
     }
 
     .skill-card {
