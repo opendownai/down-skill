@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+const INDEX_HTML = `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -528,7 +528,7 @@
         <h2 class="skill-name">
           <a href="https://clawhub.ai/skills/github" target="_blank">GitHub</a>
         </h2>
-        <p class="skill-desc">Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` commands.</p>
+        <p class="skill-desc">Interact with GitHub using the \`gh\` CLI. Use \`gh issue\`, \`gh pr\`, \`gh run\`, and \`gh api\` commands.</p>
         <div class="skill-meta">
           <span class="meta-item downloads">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
@@ -616,3 +616,50 @@
   </footer>
 </body>
 </html>
+`;
+
+const DOCS_URL = "opendown.mintlify.dev";
+const CUSTOM_URL = "opendown.ai";
+
+const FAVICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="#0a0a0f" width="100" height="100" rx="20"/><circle cx="50" cy="40" r="12" fill="#00f5ff"/><circle cx="35" cy="55" r="6" fill="#00f5ff"/><circle cx="65" cy="55" r="6" fill="#00f5ff"/><rect x="30" y="70" width="40" height="4" rx="2" fill="#8b5cf6"/><rect x="38" y="78" width="24" height="4" rx="2" fill="#8b5cf6"/></svg>`;
+
+addEventListener("fetch", (event) => {
+  event.respondWith(handleRequest(event.request));
+});
+
+async function handleRequest(request) {
+  const urlObject = new URL(request.url);
+
+  if (urlObject.pathname === "/opendown-ai.jpg") {
+    return new Response("Redirect to logo", { 
+      status: 302,
+      headers: { "Location": "https://opendown.ai/logo.jpg" } 
+    });
+  }
+
+  if (urlObject.pathname === "/favicon.ico") {
+    return new Response(FAVICON_SVG, { 
+      headers: { "Content-Type": "image/svg+xml", "Cache-Control": "public, max-age=86400" } 
+    });
+  }
+
+  if (/^\/docs/.test(urlObject.pathname)) {
+    let url = new URL(request.url);
+    url.hostname = DOCS_URL;
+
+    let proxyRequest = new Request(url, request);
+    proxyRequest.headers.set("Host", DOCS_URL);
+    proxyRequest.headers.set("X-Forwarded-Host", CUSTOM_URL);
+    proxyRequest.headers.set("X-Forwarded-Proto", "https");
+
+    return await fetch(proxyRequest);
+  }
+
+  if (urlObject.pathname === "/" || urlObject.pathname === "") {
+    return new Response(INDEX_HTML, {
+      headers: { "Content-Type": "text/html; charset=utf-8" },
+    });
+  }
+
+  return new Response("Not Found", { status: 404 });
+}

@@ -189,12 +189,27 @@ const INDEX_HTML = `<!DOCTYPE html>
 const DOCS_URL = "opendown.mintlify.dev";
 const CUSTOM_URL = "opendown.ai";
 
+const FAVICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect fill="#0a0a0f" width="100" height="100" rx="20"/><circle cx="50" cy="40" r="12" fill="#00f5ff"/><circle cx="35" cy="55" r="6" fill="#00f5ff"/><circle cx="65" cy="55" r="6" fill="#00f5ff"/><rect x="30" y="70" width="40" height="4" rx="2" fill="#8b5cf6"/><rect x="38" y="78" width="24" height="4" rx="2" fill="#8b5cf6"/></svg>`;
+
 addEventListener("fetch", (event) => {
   event.respondWith(handleRequest(event.request));
 });
 
 async function handleRequest(request) {
   const urlObject = new URL(request.url);
+
+  if (urlObject.pathname === "/opendown-ai.jpg") {
+    return new Response("Redirect to logo", { 
+      status: 302,
+      headers: { "Location": "https://opendown.ai/logo.jpg" } 
+    });
+  }
+
+  if (urlObject.pathname === "/favicon.ico") {
+    return new Response(FAVICON_SVG, { 
+      headers: { "Content-Type": "image/svg+xml", "Cache-Control": "public, max-age=86400" } 
+    });
+  }
 
   if (/^\/docs/.test(urlObject.pathname)) {
     let url = new URL(request.url);
