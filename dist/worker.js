@@ -885,6 +885,9 @@ const INDEX_HTML = `<!DOCTYPE html>
 </html>
 `;
 
+const MANIFEST_JSON = '{}';
+const SW_JS = '';
+
 const DOCS_URL = "opendown.mintlify.dev";
 const CUSTOM_URL = "opendown.ai";
 
@@ -897,6 +900,18 @@ async function handleRequest(request) {
 
   if (urlObject.pathname === "/favicon.ico") {
     return fetch("https://cdn.opendown.ai/favicon.ico");
+  }
+
+  if (urlObject.pathname === "/manifest.json") {
+    return new Response(MANIFEST_JSON, {
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  if (urlObject.pathname === "/sw.js") {
+    return new Response(SW_JS, {
+      headers: { "Content-Type": "application/javascript" },
+    });
   }
 
   if (/^\/docs/.test(urlObject.pathname)) {
