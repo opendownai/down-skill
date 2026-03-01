@@ -28,6 +28,6 @@ jobs:
       - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          apiKey: ${{ secrets.CLOUDFLARE_API_KEY }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           command: deploy dist/worker.js --name opendown
