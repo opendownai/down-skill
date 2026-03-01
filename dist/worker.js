@@ -161,8 +161,16 @@ const INDEX_HTML = `<!DOCTYPE html>
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      margin-bottom: 16px;
+      margin-bottom: 8px;
       letter-spacing: -2px;
+    }
+
+    .tagline {
+      font-size: 16px;
+      font-style: italic;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      opacity: 0.8;
     }
 
     .subtitle {
@@ -552,6 +560,7 @@ const INDEX_HTML = `<!DOCTYPE html>
       <img class="logo" src="https://cdn.opendown.ai/opendown-logo.png" alt="OpenDown">
       <div class="badge"><span class="badge-dot"></span>Live Data · Updated 2026-03-01</div>
       <h1>OpenDown</h1>
+      <p class="tagline">"We are on the verge of the Singularity" — Vernor Vinge</p>
       <p class="subtitle">ClawHub Top Skills — Curated collection of the most popular AI Agent skills to supercharge your OpenClaw. Based on real download statistics.</p>
       
       <div class="stats-bar">
