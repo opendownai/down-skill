@@ -565,15 +565,15 @@ const INDEX_HTML = `<!DOCTYPE html>
       
       <div class="stats-bar">
         <div class="stat-item">
-          <div class="stat-value">13K+</div>
+          <div class="stat-value">13,110+</div>
           <div class="stat-label">Total Skills</div>
         </div>
         <div class="stat-item">
-          <div class="stat-value">47K+</div>
-          <div class="stat-label">Forks</div>
+          <div class="stat-value">13.1M+</div>
+          <div class="stat-label">Downloads</div>
         </div>
         <div class="stat-item">
-          <div class="stat-value">243K+</div>
+          <div class="stat-value">222.0K+</div>
           <div class="stat-label">Stars</div>
         </div>
       </div>
@@ -987,6 +987,8 @@ const SUPABASE_KEY = "sb_publishable_tKPi80TfMjxEx4qwDWnWMA_n-Duazoq";
 
 const CACHE_TTL = 3600;
 
+const GITHUB_TOKEN = '';
+
 const icons = {
   'AI/ML': '🧠',
   'Developer Tools': '🔧',
@@ -1070,9 +1072,12 @@ function generateSkillCard(skill) {
 
 async function getGithubStats() {
   try {
-    const response = await fetch('https://api.github.com/repos/openclaw/openclaw', {
-      headers: { 'User-Agent': 'OpenDown' }
-    });
+    const headers = { 'User-Agent': 'OpenDown' };
+    const token = GITHUB_TOKEN;
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    const response = await fetch('https://api.github.com/repos/openclaw/openclaw', { headers });
     if (response.ok) {
       const data = await response.json();
       return { stars: data.stargazers_count, forks: data.forks_count };

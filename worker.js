@@ -197,6 +197,8 @@ const SUPABASE_KEY = "sb_publishable_tKPi80TfMjxEx4qwDWnWMA_n-Duazoq";
 
 const CACHE_TTL = 3600;
 
+const GITHUB_TOKEN = '';
+
 const icons = {
   'AI/ML': '🧠',
   'Developer Tools': '🔧',
@@ -280,9 +282,12 @@ function generateSkillCard(skill) {
 
 async function getGithubStats() {
   try {
-    const response = await fetch('https://api.github.com/repos/openclaw/openclaw', {
-      headers: { 'User-Agent': 'OpenDown' }
-    });
+    const headers = { 'User-Agent': 'OpenDown' };
+    const token = GITHUB_TOKEN;
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    const response = await fetch('https://api.github.com/repos/openclaw/openclaw', { headers });
     if (response.ok) {
       const data = await response.json();
       return { stars: data.stargazers_count, forks: data.forks_count };
