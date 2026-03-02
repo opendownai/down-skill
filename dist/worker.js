@@ -565,15 +565,15 @@ const INDEX_HTML = `<!DOCTYPE html>
       
       <div class="stats-bar">
         <div class="stat-item">
-          <div class="stat-value">13,110+</div>
+          <div class="stat-value">13K+</div>
           <div class="stat-label">Total Skills</div>
         </div>
         <div class="stat-item">
-          <div class="stat-value">13.1M+</div>
-          <div class="stat-label">Downloads</div>
+          <div class="stat-value">47K+</div>
+          <div class="stat-label">Forks</div>
         </div>
         <div class="stat-item">
-          <div class="stat-value">222.0K+</div>
+          <div class="stat-value">243K+</div>
           <div class="stat-label">Stars</div>
         </div>
       </div>
@@ -1068,11 +1068,23 @@ function generateSkillCard(skill) {
       </article>`;
 }
 
+async function getGithubStats() {
+  try {
+    const response = await fetch('https://api.github.com/repos/openclaw/openclaw', {
+      headers: { 'User-Agent': 'OpenDown' }
+    });
+    if (response.ok) {
+      const data = await response.json();
+      return { stars: data.stargazers_count, forks: data.forks_count };
+    }
+  } catch (e) {}
+  return null;
+}
+
 async function generateStatsBar(skills) {
   const totalSkillsFromDb = await getTotalSkillsFromSupabase();
   const totalSkills = totalSkillsFromDb || skills.length;
-  const totalDownloads = skills.reduce((sum, s) => sum + (s.downloads || 0), 0);
-  const totalStars = skills.reduce((sum, s) => sum + (s.stars || 0), 0);
+  const githubStats = await getGithubStats();
   
   return `<div class="stats-bar">
         <div class="stat-item">
@@ -1080,11 +1092,11 @@ async function generateStatsBar(skills) {
           <div class="stat-label">Total Skills</div>
         </div>
         <div class="stat-item">
-          <div class="stat-value">${formatNumber(totalDownloads)}+</div>
-          <div class="stat-label">Downloads</div>
+          <div class="stat-value">${formatNumber(githubStats?.forks || 0)}+</div>
+          <div class="stat-label">Forks</div>
         </div>
         <div class="stat-item">
-          <div class="stat-value">${formatNumber(totalStars)}+</div>
+          <div class="stat-value">${formatNumber(githubStats?.stars || 0)}+</div>
           <div class="stat-label">Stars</div>
         </div>
       </div>`;
