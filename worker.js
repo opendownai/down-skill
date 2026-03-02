@@ -3,10 +3,10 @@ const INDEX_HTML = `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OpenDown - ClawHub Top Skills</title>
+  <title>OpenDown — We are on the verge of the Singularity.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-primary: #0a0a0f;
@@ -21,6 +21,52 @@ const INDEX_HTML = `<!DOCTYPE html>
       --glow-cyan: 0 0 30px rgba(0, 245, 255, 0.3);
       --glow-magenta: 0 0 30px rgba(255, 0, 255, 0.3);
     }
+    :root[data-theme="light"] {
+      --bg-primary: #f5f5f7;
+      --bg-secondary: #ffffff;
+      --bg-card: #ffffff;
+      --accent-cyan: #0891b2;
+      --accent-magenta: #db2777;
+      --accent-purple: #7c3aed;
+      --accent-blue: #2563eb;
+      --text-primary: #1d1d1f;
+      --text-secondary: #6e6e73;
+      --glow-cyan: none;
+      --glow-magenta: none;
+    }
+    @media (prefers-color-scheme: light) {
+      :root:not([data-theme="dark"]) {
+        --bg-primary: #f5f5f7;
+        --bg-secondary: #ffffff;
+        --bg-card: #ffffff;
+        --accent-cyan: #0891b2;
+        --accent-magenta: #db2777;
+        --accent-purple: #7c3aed;
+        --accent-blue: #2563eb;
+        --text-primary: #1d1d1f;
+        --text-secondary: #6e6e73;
+        --glow-cyan: none;
+        --glow-magenta: none;
+      }
+    }
+    :root[data-theme="light"] .skill-card { background: #ffffff; border: 1px solid rgba(0, 0, 0, 0.08); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); }
+    :root[data-theme="light"] .skill-card:hover { border-color: rgba(8, 145, 178, 0.3); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08); }
+    :root[data-theme="light"] .search-box { background: #ffffff; border: 1px solid rgba(0, 0, 0, 0.1); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); }
+    :root[data-theme="light"] .search-box input { border: none; background: transparent; }
+    :root[data-theme="light"] .search-box input:focus { box-shadow: none; }
+    :root[data-theme="light"] .search-box:focus-within { border-color: var(--accent-cyan); box-shadow: 0 4px 16px rgba(8, 145, 178, 0.15); }
+    :root[data-theme="light"] .category-btn { background: #ffffff; border: 1px solid rgba(0, 0, 0, 0.1); color: var(--text-secondary); }
+    :root[data-theme="light"] .category-btn.active, :root[data-theme="light"] .category-btn:hover { background: var(--accent-cyan); border-color: var(--accent-cyan); color: #ffffff; }
+    :root[data-theme="light"] .stats-bar { background: #ffffff; border: 1px solid rgba(0, 0, 0, 0.08); }
+    :root[data-theme="light"] .badge { background: rgba(0, 0, 0, 0.05); border: 1px solid rgba(0, 0, 0, 0.1); }
+    :root[data-theme="light"] .theme-btn { background: #ffffff; border: 1px solid rgba(0, 0, 0, 0.1); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04); }
+    :root[data-theme="light"] .skill-rank { background: #ffffff; border: 2px solid var(--accent-purple); color: var(--accent-purple); box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2); }
+    :root[data-theme="light"] .skill-card:nth-child(1) .skill-rank { border-color: #eab308; color: #eab308; }
+    :root[data-theme="light"] .skill-card:nth-child(2) .skill-rank { border-color: #9ca3af; color: #6b7280; }
+    :root[data-theme="light"] .skill-card:nth-child(3) .skill-rank { border-color: #d97706; color: #d97706; }
+    :root[data-theme="light"] .skill-icon { background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.1)); border: 1px solid rgba(0, 0, 0, 0.06); }
+    :root[data-theme="light"] .bg-grid { background-image: linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px); }
+    :root[data-theme="light"] .bg-glow { opacity: 0.08; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Space Grotesk', sans-serif;
@@ -68,15 +114,28 @@ const INDEX_HTML = `<!DOCTYPE html>
     @keyframes pulse { 0%, 100% { box-shadow: 0 0 20px rgba(0, 245, 255, 0.2); } 50% { box-shadow: 0 0 40px rgba(0, 245, 255, 0.4); } }
     .badge-dot { width: 8px; height: 8px; background: var(--accent-cyan); border-radius: 50%; animation: blink 1.5s ease-in-out infinite; }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .header-top { display: flex; align-items: center; justify-content: center; gap: 16px; }
+    .theme-btn { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; padding: 8px; background: var(--bg-card); border: 1px solid rgba(128, 128, 128, 0.2); border-radius: 10px; color: var(--text-secondary); cursor: pointer; transition: all 0.2s ease; position: absolute; right: 24px; top: 24px; }
+    .theme-btn:hover { background: rgba(128, 128, 128, 0.1); color: var(--text-primary); }
+    .theme-btn svg { width: 20px; height: 20px; }
+    .theme-btn .icon-moon { display: none; }
+    .h1-opt-1 { font-size: 48px; font-weight: 700; background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 50%, var(--accent-magenta) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -2px; }
+    .h1-opt-2 { font-size: 48px; font-weight: 800; color: var(--text-primary); letter-spacing: -3px; text-transform: uppercase; }
+    .h1-opt-3 { font-size: 48px; font-weight: 700; color: transparent; -webkit-text-stroke: 1px var(--accent-cyan); letter-spacing: -2px; }
     h1 {
+      font-family: 'Orbitron', 'Rajdhani', sans-serif;
+      font-weight: 600;
       font-size: clamp(36px, 8vw, 64px);
-      font-weight: 700;
-      background: linear-gradient(135deg, var(--text-primary) 0%, var(--accent-cyan) 50%, var(--accent-magenta) 100%);
+      letter-spacing: 0.08em;
+      background: linear-gradient(90deg, #00f0ff, #a020f0, #00d4ff);
       -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
       background-clip: text;
+      color: transparent;
+      text-shadow: 
+        0 0 10px rgba(0, 240, 255, 0.6),
+        0 0 20px rgba(160, 32, 240, 0.4);
+      filter: drop-shadow(0 0 8px rgba(100, 200, 255, 0.5));
       margin-bottom: 16px;
-      letter-spacing: -2px;
     }
     .subtitle { font-size: 18px; color: var(--text-secondary); max-width: 600px; margin: 0 auto; line-height: 1.6; }
     .stats-bar { display: flex; justify-content: center; gap: 48px; margin-top: 40px; flex-wrap: wrap; }
@@ -112,7 +171,7 @@ const INDEX_HTML = `<!DOCTYPE html>
     }
     .skill-card:nth-child(1) .skill-rank { background: linear-gradient(135deg, #ffd700, #ffaa00); color: #000; }
     .skill-card:nth-child(2) .skill-rank { background: linear-gradient(135deg, #c0c0c0, #a0a0a0); color: #000; }
-    .skill-card:nth-child(3) .skill-rank { background: linear-gradient(135deg, #cd7f32, #a0522d); color: #fff; }
+    .skill-card:nth-child(3) .skill-rank { background: linear-gradient(135deg, #cd7f32, #b87333); color: #fff; }
     .skill-icon {
       width: 56px; height: 56px;
       background: linear-gradient(135deg, rgba(0, 245, 255, 0.1), rgba(139, 92, 246, 0.1));
@@ -134,15 +193,42 @@ const INDEX_HTML = `<!DOCTYPE html>
     .terminal-hint {
       position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
       padding: 12px 24px;
-      background: var(--bg-card);
+      background: rgba(30, 30, 40, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
+      border-radius: 16px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 13px;
       color: var(--text-secondary);
       z-index: 100;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+    :root[data-theme="light"] .terminal-hint {
+      background: rgba(255, 255, 255, 0.7);
+      border-color: rgba(0, 0, 0, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8);
     }
     .terminal-hint span { color: var(--accent-cyan); }
+    .terminal-hint .copy-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 32px; height: 32px; padding: 0; margin-left: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 8px; color: var(--accent-cyan); cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    :root[data-theme="light"] .terminal-hint .copy-btn {
+      background: rgba(0, 0, 0, 0.05); border-color: rgba(0, 0, 0, 0.1);
+    }
+    .terminal-hint .copy-btn:hover {
+      background: rgba(0, 245, 255, 0.2); border-color: var(--accent-cyan);
+    }
+    .terminal-hint .copy-btn.copied {
+      background: rgba(34, 197, 94, 0.2); border-color: #22c55e; color: #22c55e;
+    }
+    .terminal-hint .copy-btn svg { width: 16px; height: 16px; }
     footer { text-align: center; padding: 40px 24px; color: var(--text-secondary); font-size: 14px; }
     footer a { color: var(--accent-cyan); text-decoration: none; }
     footer a:hover { text-decoration: underline; }
@@ -159,6 +245,13 @@ const INDEX_HTML = `<!DOCTYPE html>
   <div class="bg-glow bg-glow-2"></div>
   <div class="container">
     <header>
+      <div class="header-top">
+        <img class="logo" src="https://cdn.opendown.ai/opendown-ai-2.png" alt="OpenDown">
+        <button class="theme-btn" id="themeToggle" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        </button>
+      </div>
       <div class="badge"><span class="badge-dot"></span>Live Data · Updated 2026-03-01</div>
       <h1>OpenDown</h1>
       <p class="subtitle">ClawHub Top Skills — Curated collection of the most popular AI Agent skills to supercharge your OpenClaw. Based on real download statistics.</p>
@@ -181,7 +274,13 @@ const INDEX_HTML = `<!DOCTYPE html>
       <article class="skill-card"><span class="skill-rank">#10</span><div class="skill-icon">📈</div><span class="category-tag">Finance</span><h2 class="skill-name"><a href="https://clawhub.ai/skills/polymarketodds" target="_blank">Polymarket</a></h2><p class="skill-desc">Query Polymarket prediction markets - check odds, trending markets, search events.</p><div class="skill-meta"><span class="meta-item downloads"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>48.1K</span><span class="meta-item stars"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>115</span><span class="meta-item">by @joelchance</span></div></article>
     </div>
   </div>
-  <div class="terminal-hint">Install: <span>npx clawhub@latest install &lt;skill-name&gt;</span></div>
+  <div class="terminal-hint">
+    Install: <span id="install-cmd">npx clawhub@latest install &lt;skill-name&gt;</span>
+    <button class="copy-btn" onclick="copyInstallCmd()" title="Copy to clipboard">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+    </button>
+    <script>!function(){var t=document.getElementById("themeToggle"),e=t.querySelector(".icon-sun"),n=t.querySelector(".icon-moon");function o(o){localStorage.setItem("theme",o),"light"===o?(document.documentElement.setAttribute("data-theme","light"),e.style.display="block",n.style.display="none"):(document.documentElement.removeAttribute("data-theme"),e.style.display="none",n.style.display="block")}t.addEventListener("click",(function(){var t=document.documentElement.getAttribute("data-theme");o("light"===t?"dark":"light")}));var r=localStorage.getItem("theme")||"dark";o(r)}();function copyInstallCmd(){const t="npx clawhub@latest install ";navigator.clipboard.writeText(t).then(()=>{const e=document.querySelector('.copy-btn');e.classList.add('copied');e.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';setTimeout(()=>{e.classList.remove('copied');e.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';},2000)})}</script>
+  </div>
   <footer><p><a href="https://opendown.ai/docs" target="_blank">Documentation</a> | Contact: <a href="mailto:support@opendown.ai">support@opendown.ai</a></p></footer>
 </body>
 </html>`;
