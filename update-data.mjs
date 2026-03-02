@@ -77,7 +77,7 @@ async function scrapeAndUpdate() {
   
   try {
     // Get homepage skills
-    await page.goto('https://clawhub.ai/', {
+    await page.goto('https://clawhub.ai/skills?sort=downloads', {
       waitUntil: 'networkidle',
       timeout: 30000
     });

@@ -232,6 +232,27 @@ async function getSkillsFromSupabase() {
   return await response.json();
 }
 
+async function getTotalSkillsFromSupabase() {
+  const response = await fetch(
+    `${SUPABASE_URL}/rest/v1/skills?slug=eq.__meta__&select=description`,
+    {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+  
+  if (!response.ok) return null;
+  
+  const data = await response.json();
+  if (data && data[0] && data[0].description) {
+    return parseInt(data[0].description);
+  }
+  return null;
+}
+
 function generateSkillCard(skill) {
   const icon = icons[skill.category] || icons.default;
   
@@ -257,14 +278,15 @@ function generateSkillCard(skill) {
       </article>`;
 }
 
-function generateStatsBar(skills) {
-  const totalSkills = skills.length;
+async function generateStatsBar(skills) {
+  const totalSkillsFromDb = await getTotalSkillsFromSupabase();
+  const totalSkills = totalSkillsFromDb || skills.length;
   const totalDownloads = skills.reduce((sum, s) => sum + (s.downloads || 0), 0);
   const totalStars = skills.reduce((sum, s) => sum + (s.stars || 0), 0);
   
   return `<div class="stats-bar">
         <div class="stat-item">
-          <div class="stat-value">${totalSkills.toLocaleString()}+</div>
+          <div class="stat-value">${formatNumber(totalSkills)}+</div>
           <div class="stat-label">Total Skills</div>
         </div>
         <div class="stat-item">
@@ -382,7 +404,7 @@ async function handleRequest(request) {
       
       const statsBarMatch = html.match(/<div class="stats-bar">[\s\S]*?<\/div>\s*<\/div>\s*<\/header>/);
       if (statsBarMatch && skills.length > 0) {
-        html = html.replace(statsBarMatch[0], generateStatsBar(skills) + '\n    </header>');
+        html = html.replace(statsBarMatch[0], await generateStatsBar(skills) + '\n    </header>');
       }
       
       const skillsGridMatch = html.match(/<div class="skills-grid">[\s\S]*?<\/div>\s*<\/div>\s*<div class="terminal-hint">/);
