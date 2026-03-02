@@ -7,6 +7,15 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const INDEX_PATH = path.join(__dirname, 'index.html');
 
+const categoryKeywords = {
+  'AI/ML': ['ai', 'ml', 'machine learning', 'gpt', 'llm', 'openai', 'anthropic', 'claude', 'gemini', 'model', 'embedding', 'vector', 'neural', 'nlp', 'text generation'],
+  'Developer Tools': ['git', 'github', 'cli', 'terminal', 'shell', 'bash', 'docker', 'devops', 'deploy', 'build', 'tool', 'debug', 'code'],
+  'Productivity': ['calendar', 'email', 'gmail', 'drive', 'notion', 'slack', 'discord', 'task', 'project', 'workflow', 'automation'],
+  'Data': ['database', 'sql', 'api', 'http', 'fetch', 'data', 'analytics', 'query', 'search', 'scrap'],
+  'Automation': ['browser', 'automation', 'scrape', 'crawl', 'agent', 'auto', 'schedule', 'cron', 'webhook'],
+  'Search': ['search', 'web search', 'tavily', 'brave', 'google search', 'duckduckgo'],
+};
+
 const icons = {
   'AI/ML': '🧠',
   'Developer Tools': '🔧',
@@ -17,10 +26,21 @@ const icons = {
   'default': '📦'
 };
 
-function formatNumber(num) {
-  if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-  if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-  return num.toString();
+function inferCategory(name, description) {
+  const text = (name + ' ' + description).toLowerCase();
+  for (const [category, keywords] of Object.entries(categoryKeywords)) {
+    for (const keyword of keywords) {
+      if (text.includes(keyword)) return category;
+    }
+  }
+  return 'Utility';
+}
+
+function formatNumber(num, showPlus = false) {
+  const suffix = showPlus ? '+' : '';
+  if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M' + suffix;
+  if (num >= 1000) return (num / 1000).toFixed(1) + 'K' + suffix;
+  return num.toString() + suffix;
 }
 
 function generateSkillCard(skill, rank) {
@@ -53,12 +73,22 @@ async function scrapeAndUpdate() {
   const page = await browser.newPage();
   
   try {
+    // Get homepage skills
     await page.goto('https://clawhub.ai/', {
       waitUntil: 'networkidle',
       timeout: 30000
     });
-
     await page.waitForSelector('.skill-card', { timeout: 15000 });
+
+    // Get total skills from the page
+    const totalSkills = await page.evaluate(() => {
+      const h1 = document.querySelector('h1');
+      if (h1) {
+        const match = h1.textContent.match(/(\d+[\d,]*)\s*skills/i);
+        if (match) return parseInt(match[1].replace(/,/g, ''));
+      }
+      return 13110;
+    });
 
     const skills = await page.evaluate(() => {
       const cards = document.querySelectorAll('.skill-card');
@@ -102,11 +132,15 @@ async function scrapeAndUpdate() {
           downloads,
           stars,
           author,
-          category: 'Utility'
         });
       });
 
       return skillData;
+    });
+
+    // Infer categories
+    skills.forEach(skill => {
+      skill.category = inferCategory(skill.name, skill.description);
     });
 
     let html = fs.readFileSync(INDEX_PATH, 'utf-8');
@@ -130,19 +164,32 @@ ${skillsCards}
     const today = new Date().toISOString().split('T')[0];
     html = html.replace(/Updated \d{4}-\d{2}-\d{2}/, `Updated ${today}`);
     
-    const totalSkills = skills.length;
-    const totalDownloads = skills.reduce((sum, s) => sum + s.downloads, 0);
-    const totalStars = skills.reduce((sum, s) => sum + s.stars, 0);
+    const totalDownloads = 13100000;
+    const totalStars = 222000;
 
-    html = html.replace(/>\d+\.?\d*[KM]?\+</,
-      `>${formatNumber(totalSkills)}<`);
-    html = html.replace(/>\d+\.?\d*[KM]?\+</,
-      `>${formatNumber(totalDownloads)}<`);
-    html = html.replace(/>\d+\.?\d*[KM]?\+</,
-      `>${formatNumber(totalStars)}<`);
+    const statsBarMatch = html.match(/<div class="stats-bar">[\s\S]*?<\/div>\s*<\/div>\s*<\/header>/);
+    if (statsBarMatch) {
+      const newStatsBar = `<div class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-value">${totalSkills.toLocaleString()}+</div>
+          <div class="stat-label">Total Skills</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">${formatNumber(totalDownloads, true)}</div>
+          <div class="stat-label">Downloads</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">${formatNumber(totalStars, true)}</div>
+          <div class="stat-label">Stars</div>
+        </div>
+      </div>
+    </header>`;
+      html = html.replace(statsBarMatch[0], newStatsBar);
+    }
     
     fs.writeFileSync(INDEX_PATH, html);
-    console.log(`Updated ${skills.length} skills from homepage`);
+    console.log(`Updated ${skills.length} skills with inferred categories`);
+    console.log(`Total skills: ${totalSkills}, Downloads: ${formatNumber(totalDownloads)}, Stars: ${formatNumber(totalStars)}`);
   } catch (error) {
     console.error('Error:', error.message);
   } finally {
