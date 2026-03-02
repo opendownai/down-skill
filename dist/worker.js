@@ -1369,6 +1369,69 @@ const INDEX_HTML = `<!DOCTYPE html>
     
     let allSkills = [];
     
+    function formatNumber(num) {
+      if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+      if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+      return num.toString();
+    }
+    
+    const icons = {
+      'AI/ML': '🧠',
+      'Developer Tools': '🔧',
+      'Productivity': '⚡',
+      'Data': '📊',
+      'Automation': '🤖',
+      'Search': '🔍',
+      'default': '📦'
+    };
+    
+    function createSkillCard(skill, rank) {
+      const icon = icons[skill.category] || icons.default;
+      const card = document.createElement('article');
+      card.className = 'skill-card';
+      card.dataset.category = skill.category || 'Utility';
+      card.innerHTML = \`
+        <span class="skill-rank">#\${rank}</span>
+        <div class="skill-icon">\${icon}</div>
+        <span class="category-tag">\${skill.category || 'Utility'}</span>
+        <h2 class="skill-name">
+          <a href="https://clawhub.ai/skills/\${skill.slug}" target="_blank">\${skill.name}</a>
+        </h2>
+        <p class="skill-desc">\${skill.desc || skill.description || ''}</p>
+        <div class="skill-meta">
+          <span class="meta-item downloads">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+            </svg>\${formatNumber(skill.downloads || 0)}
+          </span>
+          <span class="meta-item stars">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>\${skill.stars || 0}
+          </span>
+          <span class="meta-item">by @\${skill.author || 'unknown'}</span>
+        </div>
+      \`;
+      
+      // Add copy install command functionality
+      const installCmd = skill.install_cmd || \`npx clawhub@latest install \${skill.slug}\`;
+      card.addEventListener('click', () => {
+        navigator.clipboard.writeText(installCmd).then(() => {
+          const btn = card.querySelector('.copy-btn');
+          if (btn) {
+            btn.classList.add('copied');
+            btn.innerHTML = '✓ Copied!';
+            setTimeout(() => {
+              btn.classList.remove('copied');
+              btn.innerHTML = '📋 Copy';
+            }, 2000);
+          }
+        });
+      });
+      
+      return card;
+    }
+    
     function init() {
       const skillCards = document.querySelectorAll('#skillsGrid .skill-card');
       allSkills = Array.from(skillCards).map((card, index) => {
@@ -1422,28 +1485,52 @@ const INDEX_HTML = `<!DOCTYPE html>
     
     document.addEventListener('DOMContentLoaded', init);
     
-    // Bottom loader scroll handler (demo - shows loader when scrolling to bottom)
+    // Bottom loader scroll handler - real pagination
     (function() {
       const bottomLoader = document.getElementById('bottom-loader');
+      const skillsGrid = document.querySelector('.skills-grid');
       let isLoading = false;
+      let offset = 0;
+      let hasMore = true;
+      const LIMIT = 20;
       
-      window.addEventListener('scroll', () => {
-        if (isLoading) return;
+      // Initial skills count (top 100)
+      offset = 100;
+      
+      window.addEventListener('scroll', async () => {
+        if (isLoading || !hasMore) return;
         
         const scrollY = window.scrollY;
         const windowHeight = window.innerHeight;
         const documentHeight = document.body.offsetHeight;
         
-        // Show loader when within 300px of bottom
+        // Load more when within 300px of bottom
         if (scrollY + windowHeight >= documentHeight - 300) {
           isLoading = true;
           bottomLoader.classList.remove('hidden');
           
-          // Simulate loading delay (remove this in production with real data)
-          setTimeout(() => {
-            bottomLoader.classList.add('hidden');
-            isLoading = false;
-          }, 1500);
+          try {
+            const response = await fetch(\`/api/skills/more?offset=\${offset}&limit=\${LIMIT}\`);
+            const data = await response.json();
+            
+            if (data.skills && data.skills.length > 0) {
+              // Add new skills to grid
+              data.skills.forEach(skill => {
+                const card = createSkillCard(skill, offset + 1);
+                skillsGrid.appendChild(card);
+              });
+              
+              offset += data.skills.length;
+              hasMore = data.hasMore !== false;
+            } else {
+              hasMore = false;
+            }
+          } catch (error) {
+            console.error('Failed to load more skills:', error);
+          }
+          
+          bottomLoader.classList.add('hidden');
+          isLoading = false;
         }
       });
     })();
@@ -1672,6 +1759,58 @@ async function handleRequest(request) {
       });
     } catch (error) {
       return new Response(JSON.stringify({ error: error.message }), {
+        status: 500,
+        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+      });
+    }
+  }
+
+  if (urlObject.pathname === "/api/skills/more") {
+    const offset = parseInt(urlObject.searchParams.get('offset') || '0');
+    const limit = parseInt(urlObject.searchParams.get('limit') || '20');
+    
+    try {
+      const response = await fetch(
+        `${SUPABASE_URL}/rest/v1/skills?rank=gt.100&order=rank.asc&offset=${offset}&limit=${limit}`,
+        {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      
+      if (!response.ok) {
+        return new Response(JSON.stringify({ error: 'Failed to fetch', skills: [] }), {
+          status: response.status,
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+        });
+      }
+      
+      const data = await response.json();
+      
+      const skills = data.map(skill => ({
+        name: skill.name,
+        slug: skill.slug,
+        desc: skill.description,
+        author: skill.author,
+        downloads: skill.downloads,
+        stars: skill.stars,
+        category: skill.category,
+        install_cmd: `npx clawhub@latest install ${skill.slug}`
+      }));
+      
+      return new Response(JSON.stringify({ skills, hasMore: skills.length === limit }), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "public, max-age=300",
+          "Access-Control-Allow-Origin": "*"
+        },
+      });
+    } catch (error) {
+      return new Response(JSON.stringify({ error: error.message, skills: [] }), {
         status: 500,
         headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
       });

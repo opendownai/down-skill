@@ -521,6 +521,58 @@ async function handleRequest(request) {
     }
   }
 
+  if (urlObject.pathname === "/api/skills/more") {
+    const offset = parseInt(urlObject.searchParams.get('offset') || '0');
+    const limit = parseInt(urlObject.searchParams.get('limit') || '20');
+    
+    try {
+      const response = await fetch(
+        `${SUPABASE_URL}/rest/v1/skills?rank=gt.100&order=rank.asc&offset=${offset}&limit=${limit}`,
+        {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      
+      if (!response.ok) {
+        return new Response(JSON.stringify({ error: 'Failed to fetch', skills: [] }), {
+          status: response.status,
+          headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+        });
+      }
+      
+      const data = await response.json();
+      
+      const skills = data.map(skill => ({
+        name: skill.name,
+        slug: skill.slug,
+        desc: skill.description,
+        author: skill.author,
+        downloads: skill.downloads,
+        stars: skill.stars,
+        category: skill.category,
+        install_cmd: `npx clawhub@latest install ${skill.slug}`
+      }));
+      
+      return new Response(JSON.stringify({ skills, hasMore: skills.length === limit }), {
+        status: 200,
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "public, max-age=300",
+          "Access-Control-Allow-Origin": "*"
+        },
+      });
+    } catch (error) {
+      return new Response(JSON.stringify({ error: error.message, skills: [] }), {
+        status: 500,
+        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+      });
+    }
+  }
+
   if (urlObject.pathname === "/manifest.json") {
     return new Response(MANIFEST_JSON, {
       headers: { "Content-Type": "application/json" },
