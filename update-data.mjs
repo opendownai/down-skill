@@ -7,6 +7,9 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const INDEX_PATH = path.join(__dirname, 'index.html');
 
+const SUPABASE_URL = process.env.SUPABASE_URL || "https://lkwnyiznvyzwxntzaxyy.supabase.co";
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY;
+
 const categoryKeywords = {
   'AI/ML': ['ai', 'ml', 'machine learning', 'gpt', 'llm', 'openai', 'anthropic', 'claude', 'gemini', 'model', 'embedding', 'vector', 'neural', 'nlp', 'text generation'],
   'Developer Tools': ['git', 'github', 'cli', 'terminal', 'shell', 'bash', 'docker', 'devops', 'deploy', 'build', 'tool', 'debug', 'code'],
@@ -190,11 +193,52 @@ ${skillsCards}
     fs.writeFileSync(INDEX_PATH, html);
     console.log(`Updated ${skills.length} skills with inferred categories`);
     console.log(`Total skills: ${totalSkills}, Downloads: ${formatNumber(totalDownloads)}, Stars: ${formatNumber(totalStars)}`);
+    
+    if (SUPABASE_KEY) {
+      await upsertToSupabase(skills);
+    } else {
+      console.log('SUPABASE_SERVICE_KEY not set, skipping Supabase update');
+    }
   } catch (error) {
     console.error('Error:', error.message);
   } finally {
     await browser.close();
   }
+}
+
+async function upsertToSupabase(skills) {
+  console.log('Upserting skills to Supabase...');
+  
+  const records = skills.map((skill, i) => ({
+    slug: skill.slug,
+    name: skill.name,
+    description: skill.description,
+    category: skill.category,
+    downloads: skill.downloads,
+    stars: skill.stars,
+    author: skill.author,
+    rank: i + 1,
+    updated_at: new Date().toISOString()
+  }));
+  
+  const response = await fetch(`${SUPABASE_URL}/rest/v1/skills`, {
+    method: 'POST',
+    headers: {
+      'apikey': SUPABASE_KEY,
+      'Authorization': `Bearer ${SUPABASE_KEY}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'resolution=merge-duplicates'
+    },
+    body: JSON.stringify(records)
+  });
+  
+  if (!response.ok) {
+    const error = await response.text();
+    console.error('Supabase error:', error);
+    return;
+  }
+  
+  console.log(`Successfully upserted ${records.length} skills to Supabase`);
 }
 
 scrapeAndUpdate();

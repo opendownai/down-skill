@@ -557,15 +557,15 @@ const INDEX_HTML = `<!DOCTYPE html>
 
   <div class="container">
     <header>
-      <img class="logo" src="https://cdn.opendown.ai/opendown-logo.png" alt="OpenDown">
-      <div class="badge"><span class="badge-dot"></span>Live Data · Updated 2026-03-01</div>
+      <img class="logo" src="https://cdn.opendown.ai/opendown-ai-2.png" alt="OpenDown">
+      <div class="badge"><span class="badge-dot"></span>Live Data · Updated 2026-03-02</div>
       <h1>OpenDown</h1>
       <p class="tagline">"We are on the verge of the Singularity" — Vernor Vinge</p>
       <p class="subtitle">ClawHub Top Skills — Curated collection of the most popular AI Agent skills to supercharge your OpenClaw. Based on real download statistics.</p>
       
       <div class="stats-bar">
         <div class="stat-item">
-          <div class="stat-value">12.7K+</div>
+          <div class="stat-value">13,110+</div>
           <div class="stat-label">Total Skills</div>
         </div>
         <div class="stat-item">
@@ -573,7 +573,7 @@ const INDEX_HTML = `<!DOCTYPE html>
           <div class="stat-label">Downloads</div>
         </div>
         <div class="stat-item">
-          <div class="stat-value">22.2K+</div>
+          <div class="stat-value">222.0K+</div>
           <div class="stat-label">Stars</div>
         </div>
       </div>
@@ -600,50 +600,108 @@ const INDEX_HTML = `<!DOCTYPE html>
     <div class="skills-grid" id="skillsGrid">
       <article class="skill-card">
         <span class="skill-rank">#1</span>
+        <div class="skill-icon">📊</div>
+        <span class="category-tag">Data</span>
+        <h2 class="skill-name">
+          <a href="https://clawhub.ai/skills/trello" target="_blank">Trello</a>
+        </h2>
+        <p class="skill-desc">Manage Trello boards, lists, and cards via the Trello REST API.</p>
+        <div class="skill-meta">
+          <span class="meta-item downloads">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            17.6K
+          </span>
+          <span class="meta-item stars">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            84
+          </span>
+          <span class="meta-item">by @steipete</span>
+        </div>
+      </article>
+      <article class="skill-card">
+        <span class="skill-rank">#2</span>
+        <div class="skill-icon">🔧</div>
+        <span class="category-tag">Developer Tools</span>
+        <h2 class="skill-name">
+          <a href="https://clawhub.ai/skills/slack" target="_blank">Slack</a>
+        </h2>
+        <p class="skill-desc">Use when you need to control Slack from Clawdbot via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.</p>
+        <div class="skill-meta">
+          <span class="meta-item downloads">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            19.8K
+          </span>
+          <span class="meta-item stars">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            77
+          </span>
+          <span class="meta-item">by @steipete</span>
+        </div>
+      </article>
+      <article class="skill-card">
+        <span class="skill-rank">#3</span>
         <div class="skill-icon">🧠</div>
         <span class="category-tag">AI/ML</span>
         <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/ontology" target="_blank">Ontology</a>
+          <a href="https://clawhub.ai/skills/caldav-calendar" target="_blank">Caldav Calendar</a>
         </h2>
-        <p class="skill-desc">Typed knowledge graph for structured agent memory and composable skills. Use when creating/querying entities (Person, Project, Task, Event, Document).</p>
+        <p class="skill-desc">Sync and query CalDAV calendars (iCloud, Google, Fastmail, Nextcloud, etc.) using vdirsyncer + khal. Works on Linux.</p>
         <div class="skill-meta">
           <span class="meta-item downloads">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            91.2K
+            15.3K
           </span>
           <span class="meta-item stars">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            224
+            150
           </span>
-          <span class="meta-item">by @oswalpalash</span>
+          <span class="meta-item">by @Asleep123</span>
         </div>
       </article>
-
       <article class="skill-card">
-        <span class="skill-rank">#2</span>
-        <div class="skill-icon">🔄</div>
+        <span class="skill-rank">#4</span>
+        <div class="skill-icon">⚡</div>
         <span class="category-tag">Productivity</span>
         <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/self-improving-agent" target="_blank">Self-Improving Agent</a>
+          <a href="https://clawhub.ai/skills/answer-overflow" target="_blank">Answer Overflow</a>
         </h2>
-        <p class="skill-desc">Enables AI agents to learn from interactions, capturing learnings, errors, and corrections for continuous improvement.</p>
+        <p class="skill-desc">Search indexed Discord community discussions via Answer Overflow. Find solutions to coding problems, library issues, and community Q&A that only exist in Discord conversations.</p>
         <div class="skill-meta">
           <span class="meta-item downloads">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            81.1K
+            8.8K
           </span>
           <span class="meta-item stars">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            958
+            101
+          </span>
+          <span class="meta-item">by @RhysSullivan</span>
+        </div>
+      </article>
+      <article class="skill-card">
+        <span class="skill-rank">#5</span>
+        <div class="skill-icon">🧠</div>
+        <span class="category-tag">AI/ML</span>
+        <h2 class="skill-name">
+          <a href="https://clawhub.ai/skills/self-improving-agent" target="_blank">self-improving-agent</a>
+        </h2>
+        <p class="skill-desc">Captures learnings, errors, and corrections to enable continuous improvement. Use when: (1) A command or operation fails unexpectedly, (2) User corrects Clau...</p>
+        <div class="skill-meta">
+          <span class="meta-item downloads">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            82.2K
+          </span>
+          <span class="meta-item stars">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            974
           </span>
           <span class="meta-item">by @pskoett</span>
         </div>
       </article>
-
       <article class="skill-card">
-        <span class="skill-rank">#3</span>
-        <div class="skill-icon">📧</div>
-        <span class="category-tag">Productivity</span>
+        <span class="skill-rank">#6</span>
+        <div class="skill-icon">🧠</div>
+        <span class="category-tag">AI/ML</span>
         <h2 class="skill-name">
           <a href="https://clawhub.ai/skills/gog" target="_blank">Gog</a>
         </h2>
@@ -651,62 +709,59 @@ const INDEX_HTML = `<!DOCTYPE html>
         <div class="skill-meta">
           <span class="meta-item downloads">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            75.5K
+            75.9K
           </span>
           <span class="meta-item stars">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            593
+            597
           </span>
           <span class="meta-item">by @steipete</span>
         </div>
       </article>
-
       <article class="skill-card">
-        <span class="skill-rank">#4</span>
-        <div class="skill-icon">🔍</div>
-        <span class="category-tag">Search</span>
+        <span class="skill-rank">#7</span>
+        <div class="skill-icon">🧠</div>
+        <span class="category-tag">AI/ML</span>
         <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/tavily-search" target="_blank">Tavily Web Search</a>
+          <a href="https://clawhub.ai/skills/tavily-web-search" target="_blank">Tavily Web Search</a>
         </h2>
         <p class="skill-desc">AI-optimized web search via Tavily API. Returns concise, relevant results for AI agents.</p>
         <div class="skill-meta">
           <span class="meta-item downloads">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            71.8K
+            72.6K
           </span>
           <span class="meta-item stars">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            320
+            325
           </span>
           <span class="meta-item">by @arun-8687</span>
         </div>
       </article>
-
       <article class="skill-card">
-        <span class="skill-rank">#5</span>
-        <div class="skill-icon">🧩</div>
-        <span class="category-tag">Developer</span>
+        <span class="skill-rank">#8</span>
+        <div class="skill-icon">🤖</div>
+        <span class="category-tag">Automation</span>
         <h2 class="skill-name">
           <a href="https://clawhub.ai/skills/find-skills" target="_blank">Find Skills</a>
         </h2>
-        <p class="skill-desc">Helps users discover and install agent skills when they ask questions like "how do I do X".</p>
+        <p class="skill-desc">Helps users discover and install agent skills when they ask questions like "how do I do X", "find a skill for X", "is there a skill that can...", or express interest in extending capabilities. This skill should be used when the user is looking for functionality that might exist as an installable skill.</p>
         <div class="skill-meta">
           <span class="meta-item downloads">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            66.6K
+            67.6K
           </span>
           <span class="meta-item stars">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            283
+            289
           </span>
           <span class="meta-item">by @JimLiuxinghai</span>
         </div>
       </article>
-
       <article class="skill-card">
-        <span class="skill-rank">#6</span>
-        <div class="skill-icon">📝</div>
-        <span class="category-tag">Utility</span>
+        <span class="skill-rank">#9</span>
+        <div class="skill-icon">🔧</div>
+        <span class="category-tag">Developer Tools</span>
         <h2 class="skill-name">
           <a href="https://clawhub.ai/skills/summarize" target="_blank">Summarize</a>
         </h2>
@@ -714,28 +769,27 @@ const INDEX_HTML = `<!DOCTYPE html>
         <div class="skill-meta">
           <span class="meta-item downloads">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            62.8K
+            63.5K
           </span>
           <span class="meta-item stars">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            295
+            297
           </span>
           <span class="meta-item">by @steipete</span>
         </div>
       </article>
-
       <article class="skill-card">
-        <span class="skill-rank">#7</span>
-        <div class="skill-icon">🐙</div>
-        <span class="category-tag">Developer</span>
+        <span class="skill-rank">#10</span>
+        <div class="skill-icon">🔧</div>
+        <span class="category-tag">Developer Tools</span>
         <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/github" target="_blank">GitHub</a>
+          <a href="https://clawhub.ai/skills/github" target="_blank">Github</a>
         </h2>
-        <p class="skill-desc">Interact with GitHub using the \`gh\` CLI. Use \`gh issue\`, \`gh pr\`, \`gh run\`, and \`gh api\` commands.</p>
+        <p class="skill-desc">Interact with GitHub using the \`gh\` CLI. Use \`gh issue\`, \`gh pr\`, \`gh run\`, and \`gh api\` for issues, PRs, CI runs, and advanced queries.</p>
         <div class="skill-meta">
           <span class="meta-item downloads">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            58.8K
+            59.3K
           </span>
           <span class="meta-item stars">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
@@ -744,32 +798,10 @@ const INDEX_HTML = `<!DOCTYPE html>
           <span class="meta-item">by @steipete</span>
         </div>
       </article>
-
       <article class="skill-card">
-        <span class="skill-rank">#8</span>
-        <div class="skill-icon">🌐</div>
-        <span class="category-tag">Automation</span>
-        <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/agent-browser" target="_blank">Agent Browser</a>
-        </h2>
-        <p class="skill-desc">Fast Rust-based headless browser automation CLI with Node.js fallback for AI agents.</p>
-        <div class="skill-meta">
-          <span class="meta-item downloads">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            58.6K
-          </span>
-          <span class="meta-item stars">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            304
-          </span>
-          <span class="meta-item">by @TheSethRose</span>
-        </div>
-      </article>
-
-      <article class="skill-card">
-        <span class="skill-rank">#9</span>
-        <div class="skill-icon">🌤️</div>
-        <span class="category-tag">Utility</span>
+        <span class="skill-rank">#11</span>
+        <div class="skill-icon">📊</div>
+        <span class="category-tag">Data</span>
         <h2 class="skill-name">
           <a href="https://clawhub.ai/skills/weather" target="_blank">Weather</a>
         </h2>
@@ -777,34 +809,93 @@ const INDEX_HTML = `<!DOCTYPE html>
         <div class="skill-meta">
           <span class="meta-item downloads">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            49.7K
+            50.1K
           </span>
           <span class="meta-item stars">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            170
+            172
           </span>
           <span class="meta-item">by @steipete</span>
         </div>
       </article>
-
       <article class="skill-card">
-        <span class="skill-rank">#10</span>
-        <div class="skill-icon">📈</div>
-        <span class="category-tag">Finance</span>
+        <span class="skill-rank">#12</span>
+        <div class="skill-icon">⚡</div>
+        <span class="category-tag">Productivity</span>
         <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/polymarketodds" target="_blank">Polymarket</a>
+          <a href="https://clawhub.ai/skills/polymarket" target="_blank">Polymarket</a>
         </h2>
-        <p class="skill-desc">Query Polymarket prediction markets - check odds, trending markets, search events, track probabilities.</p>
+        <p class="skill-desc">Query Polymarket prediction markets - check odds, trending markets, search events, track prices and momentum. Includes watchlist alerts, resolution calendar,...</p>
         <div class="skill-meta">
           <span class="meta-item downloads">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            48.1K
+            48.6K
           </span>
           <span class="meta-item stars">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            115
+            121
           </span>
           <span class="meta-item">by @joelchance</span>
+        </div>
+      </article>
+      <article class="skill-card">
+        <span class="skill-rank">#13</span>
+        <div class="skill-icon">🧠</div>
+        <span class="category-tag">AI/ML</span>
+        <h2 class="skill-name">
+          <a href="https://clawhub.ai/skills/proactive-agent" target="_blank">Proactive Agent</a>
+        </h2>
+        <p class="skill-desc">Transform AI agents from task-followers into proactive partners that anticipate needs and continuously improve. Now with WAL Protocol, Working Buffer, Autonomous Crons, and battle-tested patterns. Part of the Hal Stack 🦞</p>
+        <div class="skill-meta">
+          <span class="meta-item downloads">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            47.3K
+          </span>
+          <span class="meta-item stars">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            312
+          </span>
+          <span class="meta-item">by @halthelobster</span>
+        </div>
+      </article>
+      <article class="skill-card">
+        <span class="skill-rank">#14</span>
+        <div class="skill-icon">🔧</div>
+        <span class="category-tag">Developer Tools</span>
+        <h2 class="skill-name">
+          <a href="https://clawhub.ai/skills/sonoscli" target="_blank">Sonoscli</a>
+        </h2>
+        <p class="skill-desc">Control Sonos speakers (discover/status/play/volume/group).</p>
+        <div class="skill-meta">
+          <span class="meta-item downloads">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            43.9K
+          </span>
+          <span class="meta-item stars">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            30
+          </span>
+          <span class="meta-item">by @steipete</span>
+        </div>
+      </article>
+      <article class="skill-card">
+        <span class="skill-rank">#15</span>
+        <div class="skill-icon">⚡</div>
+        <span class="category-tag">Productivity</span>
+        <h2 class="skill-name">
+          <a href="https://clawhub.ai/skills/notion" target="_blank">Notion</a>
+        </h2>
+        <p class="skill-desc">Notion API for creating and managing pages, databases, and blocks.</p>
+        <div class="skill-meta">
+          <span class="meta-item downloads">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            34.3K
+          </span>
+          <span class="meta-item stars">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            128
+          </span>
+          <span class="meta-item">by @steipete</span>
         </div>
       </article>
     </div>
@@ -891,6 +982,119 @@ const SW_JS = '';
 const DOCS_URL = "opendown.mintlify.dev";
 const CUSTOM_URL = "opendown.ai";
 
+const SUPABASE_URL = "https://lkwnyiznvyzwxntzaxyy.supabase.co";
+const SUPABASE_KEY = "sb_publishable_tKPi80TfMjxEx4qwDWnWMA_n-Duazoq";
+
+const CACHE_TTL = 3600;
+
+const icons = {
+  'AI/ML': '🧠',
+  'Developer Tools': '🔧',
+  'Productivity': '⚡',
+  'Data': '📊',
+  'Automation': '🤖',
+  'Search': '🔍',
+  'default': '📦'
+};
+
+function formatNumber(num) {
+  if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+  if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+  return num.toString();
+}
+
+async function getSkillsFromSupabase() {
+  const response = await fetch(
+    `${SUPABASE_URL}/rest/v1/skills?rank=lt.100&order=rank.asc&select=*`,
+    {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+  
+  if (!response.ok) {
+    throw new Error(`Supabase error: ${response.status}`);
+  }
+  
+  return await response.json();
+}
+
+function generateSkillCard(skill) {
+  const icon = icons[skill.category] || icons.default;
+  
+  return `<article class="skill-card">
+        <span class="skill-rank">#${skill.rank}</span>
+        <div class="skill-icon">${icon}</div>
+        <span class="category-tag">${skill.category || 'Utility'}</span>
+        <h2 class="skill-name">
+          <a href="https://clawhub.ai/skills/${skill.slug}" target="_blank">${skill.name}</a>
+        </h2>
+        <p class="skill-desc">${skill.description || ''}</p>
+        <div class="skill-meta">
+          <span class="meta-item downloads">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            ${formatNumber(skill.downloads)}
+          </span>
+          <span class="meta-item stars">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            ${formatNumber(skill.stars)}
+          </span>
+          <span class="meta-item">by @${skill.author || 'unknown'}</span>
+        </div>
+      </article>`;
+}
+
+function generateStatsBar(skills) {
+  const totalSkills = skills.length;
+  const totalDownloads = skills.reduce((sum, s) => sum + (s.downloads || 0), 0);
+  const totalStars = skills.reduce((sum, s) => sum + (s.stars || 0), 0);
+  
+  return `<div class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-value">${totalSkills.toLocaleString()}+</div>
+          <div class="stat-label">Total Skills</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">${formatNumber(totalDownloads)}+</div>
+          <div class="stat-label">Downloads</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">${formatNumber(totalStars)}+</div>
+          <div class="stat-label">Stars</div>
+        </div>
+      </div>`;
+}
+
+async function fetchWithCache(url, options, cacheKey) {
+  const cache = caches.default;
+  
+  const cached = await cache.match(cacheKey);
+  if (cached) {
+    return cached;
+  }
+  
+  const response = await fetch(url, options);
+  
+  if (response.ok) {
+    const cloned = response.clone();
+    const headers = new Headers(cloned.headers);
+    headers.set('Cache-Control', `public, max-age=${CACHE_TTL}`);
+    
+    const cachedResponse = new Response(await cloned.arrayBuffer(), {
+      status: cloned.status,
+      statusText: cloned.statusText,
+      headers
+    });
+    
+    cache.put(cacheKey, cachedResponse).catch(() => {});
+  }
+  
+  return response;
+}
+
 addEventListener("fetch", (event) => {
   event.respondWith(handleRequest(event.request));
 });
@@ -900,6 +1104,37 @@ async function handleRequest(request) {
 
   if (urlObject.pathname === "/favicon.ico") {
     return fetch("https://cdn.opendown.ai/favicon.ico");
+  }
+
+  if (urlObject.pathname === "/api/skills") {
+    const cacheKey = new Request(`${urlObject.origin}/api/skills`);
+    
+    try {
+      const response = await fetchWithCache(
+        `${SUPABASE_URL}/rest/v1/skills?rank=lt.100&order=rank.asc`,
+        {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          }
+        },
+        cacheKey
+      );
+      
+      return new Response(await response.arrayBuffer(), {
+        status: response.status,
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": `public, max-age=${CACHE_TTL}`
+        },
+      });
+    } catch (error) {
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
   }
 
   if (urlObject.pathname === "/manifest.json") {
@@ -927,9 +1162,39 @@ async function handleRequest(request) {
   }
 
   if (urlObject.pathname === "/" || urlObject.pathname === "") {
-    return new Response(INDEX_HTML, {
-      headers: { "Content-Type": "text/html; charset=utf-8" },
-    });
+    try {
+      const skills = await getSkillsFromSupabase();
+      
+      const today = new Date().toISOString().split('T')[0];
+      let html = INDEX_HTML;
+      
+      html = html.replace(/Updated \d{4}-\d{2}-\d{2}/, `Updated ${today}`);
+      
+      const statsBarMatch = html.match(/<div class="stats-bar">[\s\S]*?<\/div>\s*<\/div>\s*<\/header>/);
+      if (statsBarMatch && skills.length > 0) {
+        html = html.replace(statsBarMatch[0], generateStatsBar(skills) + '\n    </header>');
+      }
+      
+      const skillsGridMatch = html.match(/<div class="skills-grid">[\s\S]*?<\/div>\s*<\/div>\s*<div class="terminal-hint">/);
+      if (skillsGridMatch && skills.length > 0) {
+        const skillsCards = skills.map(s => generateSkillCard(s)).join('\n      ');
+        html = html.replace(skillsGridMatch[0], `<div class="skills-grid">
+      ${skillsCards}
+    </div>
+  </div>
+
+  <div class="terminal-hint">`);
+      }
+      
+      return new Response(html, {
+        headers: { "Content-Type": "text/html; charset=utf-8" },
+      });
+    } catch (error) {
+      console.error('Error fetching skills:', error);
+      return new Response(INDEX_HTML, {
+        headers: { "Content-Type": "text/html; charset=utf-8" },
+      });
+    }
   }
 
   return new Response("Not Found", { status: 404 });

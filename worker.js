@@ -192,6 +192,119 @@ const SW_JS = '';
 const DOCS_URL = "opendown.mintlify.dev";
 const CUSTOM_URL = "opendown.ai";
 
+const SUPABASE_URL = "https://lkwnyiznvyzwxntzaxyy.supabase.co";
+const SUPABASE_KEY = "sb_publishable_tKPi80TfMjxEx4qwDWnWMA_n-Duazoq";
+
+const CACHE_TTL = 3600;
+
+const icons = {
+  'AI/ML': '🧠',
+  'Developer Tools': '🔧',
+  'Productivity': '⚡',
+  'Data': '📊',
+  'Automation': '🤖',
+  'Search': '🔍',
+  'default': '📦'
+};
+
+function formatNumber(num) {
+  if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+  if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+  return num.toString();
+}
+
+async function getSkillsFromSupabase() {
+  const response = await fetch(
+    `${SUPABASE_URL}/rest/v1/skills?rank=lt.100&order=rank.asc&select=*`,
+    {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+  
+  if (!response.ok) {
+    throw new Error(`Supabase error: ${response.status}`);
+  }
+  
+  return await response.json();
+}
+
+function generateSkillCard(skill) {
+  const icon = icons[skill.category] || icons.default;
+  
+  return `<article class="skill-card">
+        <span class="skill-rank">#${skill.rank}</span>
+        <div class="skill-icon">${icon}</div>
+        <span class="category-tag">${skill.category || 'Utility'}</span>
+        <h2 class="skill-name">
+          <a href="https://clawhub.ai/skills/${skill.slug}" target="_blank">${skill.name}</a>
+        </h2>
+        <p class="skill-desc">${skill.description || ''}</p>
+        <div class="skill-meta">
+          <span class="meta-item downloads">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+            ${formatNumber(skill.downloads)}
+          </span>
+          <span class="meta-item stars">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            ${formatNumber(skill.stars)}
+          </span>
+          <span class="meta-item">by @${skill.author || 'unknown'}</span>
+        </div>
+      </article>`;
+}
+
+function generateStatsBar(skills) {
+  const totalSkills = skills.length;
+  const totalDownloads = skills.reduce((sum, s) => sum + (s.downloads || 0), 0);
+  const totalStars = skills.reduce((sum, s) => sum + (s.stars || 0), 0);
+  
+  return `<div class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-value">${totalSkills.toLocaleString()}+</div>
+          <div class="stat-label">Total Skills</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">${formatNumber(totalDownloads)}+</div>
+          <div class="stat-label">Downloads</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">${formatNumber(totalStars)}+</div>
+          <div class="stat-label">Stars</div>
+        </div>
+      </div>`;
+}
+
+async function fetchWithCache(url, options, cacheKey) {
+  const cache = caches.default;
+  
+  const cached = await cache.match(cacheKey);
+  if (cached) {
+    return cached;
+  }
+  
+  const response = await fetch(url, options);
+  
+  if (response.ok) {
+    const cloned = response.clone();
+    const headers = new Headers(cloned.headers);
+    headers.set('Cache-Control', `public, max-age=${CACHE_TTL}`);
+    
+    const cachedResponse = new Response(await cloned.arrayBuffer(), {
+      status: cloned.status,
+      statusText: cloned.statusText,
+      headers
+    });
+    
+    cache.put(cacheKey, cachedResponse).catch(() => {});
+  }
+  
+  return response;
+}
+
 addEventListener("fetch", (event) => {
   event.respondWith(handleRequest(event.request));
 });
@@ -201,6 +314,37 @@ async function handleRequest(request) {
 
   if (urlObject.pathname === "/favicon.ico") {
     return fetch("https://cdn.opendown.ai/favicon.ico");
+  }
+
+  if (urlObject.pathname === "/api/skills") {
+    const cacheKey = new Request(`${urlObject.origin}/api/skills`);
+    
+    try {
+      const response = await fetchWithCache(
+        `${SUPABASE_URL}/rest/v1/skills?rank=lt.100&order=rank.asc`,
+        {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`,
+            'Content-Type': 'application/json'
+          }
+        },
+        cacheKey
+      );
+      
+      return new Response(await response.arrayBuffer(), {
+        status: response.status,
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": `public, max-age=${CACHE_TTL}`
+        },
+      });
+    } catch (error) {
+      return new Response(JSON.stringify({ error: error.message }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
   }
 
   if (urlObject.pathname === "/manifest.json") {
@@ -228,9 +372,39 @@ async function handleRequest(request) {
   }
 
   if (urlObject.pathname === "/" || urlObject.pathname === "") {
-    return new Response(INDEX_HTML, {
-      headers: { "Content-Type": "text/html; charset=utf-8" },
-    });
+    try {
+      const skills = await getSkillsFromSupabase();
+      
+      const today = new Date().toISOString().split('T')[0];
+      let html = INDEX_HTML;
+      
+      html = html.replace(/Updated \d{4}-\d{2}-\d{2}/, `Updated ${today}`);
+      
+      const statsBarMatch = html.match(/<div class="stats-bar">[\s\S]*?<\/div>\s*<\/div>\s*<\/header>/);
+      if (statsBarMatch && skills.length > 0) {
+        html = html.replace(statsBarMatch[0], generateStatsBar(skills) + '\n    </header>');
+      }
+      
+      const skillsGridMatch = html.match(/<div class="skills-grid">[\s\S]*?<\/div>\s*<\/div>\s*<div class="terminal-hint">/);
+      if (skillsGridMatch && skills.length > 0) {
+        const skillsCards = skills.map(s => generateSkillCard(s)).join('\n      ');
+        html = html.replace(skillsGridMatch[0], `<div class="skills-grid">
+      ${skillsCards}
+    </div>
+  </div>
+
+  <div class="terminal-hint">`);
+      }
+      
+      return new Response(html, {
+        headers: { "Content-Type": "text/html; charset=utf-8" },
+      });
+    } catch (error) {
+      console.error('Error fetching skills:', error);
+      return new Response(INDEX_HTML, {
+        headers: { "Content-Type": "text/html; charset=utf-8" },
+      });
+    }
   }
 
   return new Response("Not Found", { status: 404 });
