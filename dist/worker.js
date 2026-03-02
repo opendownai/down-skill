@@ -987,8 +987,6 @@ const SUPABASE_KEY = "sb_publishable_tKPi80TfMjxEx4qwDWnWMA_n-Duazoq";
 
 const CACHE_TTL = 3600;
 
-const GITHUB_TOKEN = '';
-
 const icons = {
   'AI/ML': '🧠',
   'Developer Tools': '🔧',
@@ -1045,6 +1043,29 @@ async function getTotalSkillsFromSupabase() {
   return null;
 }
 
+async function getGithubStatsFromSupabase() {
+  const response = await fetch(
+    `${SUPABASE_URL}/rest/v1/skills?slug=eq.__github__&select=description`,
+    {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    }
+  );
+  
+  if (!response.ok) return null;
+  
+  const data = await response.json();
+  if (data && data[0] && data[0].description) {
+    try {
+      return JSON.parse(data[0].description);
+    } catch (e) {}
+  }
+  return null;
+}
+
 function generateSkillCard(skill) {
   const icon = icons[skill.category] || icons.default;
   
@@ -1070,26 +1091,12 @@ function generateSkillCard(skill) {
       </article>`;
 }
 
-async function getGithubStats() {
-  try {
-    const headers = { 'User-Agent': 'OpenDown' };
-    const token = GITHUB_TOKEN;
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-    const response = await fetch('https://api.github.com/repos/openclaw/openclaw', { headers });
-    if (response.ok) {
-      const data = await response.json();
-      return { stars: data.stargazers_count, forks: data.forks_count };
-    }
-  } catch (e) {}
-  return null;
-}
+
 
 async function generateStatsBar(skills) {
   const totalSkillsFromDb = await getTotalSkillsFromSupabase();
   const totalSkills = totalSkillsFromDb || skills.length;
-  const githubStats = await getGithubStats();
+  const githubStats = await getGithubStatsFromSupabase();
   
   return `<div class="stats-bar">
         <div class="stat-item">

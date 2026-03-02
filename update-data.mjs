@@ -196,6 +196,7 @@ ${skillsCards}
     
     if (SUPABASE_KEY) {
       await upsertToSupabase(skills);
+      await updateGithubStats();
     } else {
       console.log('SUPABASE_SERVICE_KEY not set, skipping Supabase update');
     }
@@ -239,6 +240,53 @@ async function upsertToSupabase(skills) {
   }
   
   console.log(`Successfully upserted ${records.length} skills to Supabase`);
+}
+
+async function updateGithubStats() {
+  console.log('Fetching GitHub stats...');
+  
+  try {
+    const response = await fetch('https://api.github.com/repos/openclaw/openclaw', {
+      headers: { 'User-Agent': 'OpenDown-Update' }
+    });
+    
+    if (!response.ok) {
+      console.error('GitHub API error:', response.status);
+      return;
+    }
+    
+    const data = await response.json();
+    const stats = { forks: data.forks_count, stars: data.stargazers_count };
+    console.log(`GitHub: ${stats.forks} forks, ${stats.stars} stars`);
+    
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/skills?slug=eq.__github__`, {
+      method: 'PATCH',
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ name: 'GitHub Stats', description: JSON.stringify(stats) })
+    });
+    
+    if (!res.ok) {
+      await fetch(`${SUPABASE_URL}/rest/v1/skills`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'resolution=merge-duplicates'
+        },
+        body: JSON.stringify([{ slug: '__github__', name: 'GitHub Stats', description: JSON.stringify(stats) }])
+      });
+    }
+    
+    console.log('GitHub stats saved to Supabase');
+  } catch (error) {
+    console.error('Failed to fetch GitHub stats:', error.message);
+  }
 }
 
 scrapeAndUpdate();
