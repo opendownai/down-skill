@@ -81,61 +81,90 @@ async function scrapeAndUpdate() {
       waitUntil: 'networkidle',
       timeout: 30000
     });
-    await page.waitForSelector('.skill-card', { timeout: 15000 });
+    await page.waitForSelector('main a[href*="/"]', { timeout: 15000 });
 
     // Get total skills from the page
     const totalSkills = await page.evaluate(() => {
-      const h1 = document.querySelector('h1');
-      if (h1) {
-        const match = h1.textContent.match(/(\d+[\d,]*)\s*skills/i);
+      const heading = document.querySelector('h1');
+      if (heading) {
+        const match = heading.textContent.match(/Skills\s*\(?([\d,]+)\)?/i);
         if (match) return parseInt(match[1].replace(/,/g, ''));
       }
-      return 13110;
+      return 13564;
     });
 
     const skills = await page.evaluate(() => {
-      const cards = document.querySelectorAll('.skill-card');
+      const links = document.querySelectorAll('main a[href*="/"]');
       const skillData = [];
 
-      const parseNum = (text) => {
+      const parseNum = (text, isK = false) => {
         if (!text) return 0;
-        const upperText = text.toUpperCase();
         const num = parseFloat(text.replace(/,/g, ''));
-        if (upperText.includes('K')) return Math.round(num * 1000);
-        if (upperText.includes('M')) return Math.round(num * 1000000);
-        if (upperText.includes('B')) return Math.round(num * 1000000000);
+        if (isK) return Math.round(num * 1000);
         return Math.round(num);
       };
 
-      cards.forEach(card => {
-        const href = card.getAttribute('href');
-        const slug = href.split('/').pop();
+      links.forEach(link => {
+        const text = link.textContent || '';
+        const href = link.href;
         
-        const titleEl = card.querySelector('.skill-card-title');
-        const name = titleEl?.textContent?.trim() || '';
+        // Extract slug from URL: https://clawhub.ai/author/slug
+        const urlMatch = href.match(/clawhub\.ai\/[\w-]+\/([a-z0-9-]+)/i);
+        const slug = urlMatch ? urlMatch[1] : '';
         
-        const summaryEl = card.querySelector('.skill-card-summary');
-        const description = summaryEl?.textContent?.trim() || '';
-
-        const authorEl = card.querySelector('.user-handle');
-        const author = authorEl?.textContent?.trim().replace('@', '') || 'unknown';
-
-        const footerText = card.querySelector('.skill-card-footer')?.textContent || '';
+        // Name is before the slash
+        const name = text.split('/')[0].trim();
         
-        const downloadMatch = footerText.match(/([\d,]+\.?\d*)K/i);
-        const downloads = downloadMatch ? Math.round(parseFloat(downloadMatch[1]) * 1000) : 0;
+        // Description: Find slug in text and extract description after it
+        let description = '';
+        const firstSlugIndex = text.indexOf('/' + slug);
+        if (firstSlugIndex > 0) {
+          // Look for second occurrence or just take after first /slug
+          const afterFirst = text.substring(firstSlugIndex + slug.length + 1);
+          if (afterFirst.startsWith(slug)) {
+            // Second occurrence exists, use it
+            description = afterFirst.substring(slug.length);
+          } else {
+            // Only one occurrence
+            description = afterFirst;
+          }
+        }
+        // Remove leading slash/dot if present
+        description = description.replace(/^[.\/]/, '');
+        description = description.replace(/by\s*@[\w-]+.*$/, '').replace(/★.*$/, '').trim();
+        
+        // Match downloads like "86.2k", "77.2k"
+        const downloadMatch = text.match(/(\d+\.?\d*)\s*[kK]/);
+        
+        // Extract stars more carefully - take the number right after ★, up to 4 digits (to avoid version numbers)
+        const starsRawMatch = text.match(/★\s*(\d{1,4})/);
+        let stars = 0;
+        if (starsRawMatch) {
+          const numStr = starsRawMatch[1];
+          // Check if followed by 'k' (meaning thousands)
+          const afterStars = text.substring(text.indexOf(starsRawMatch[0]) + starsRawMatch[0].length);
+          if (afterStars.match(/^\s*k/i)) {
+            stars = parseInt(numStr) * 1000;
+          } else {
+            stars = parseInt(numStr);
+          }
+        }
+        
+        const authorMatch = text.match(/by\s*@(\S+?)(?:\s+\d)/);
+        
+        const author = authorMatch ? authorMatch[1] : 'unknown';
+        const downloads = downloadMatch ? parseNum(downloadMatch[1], true) : 0;
 
-        const starsMatch = footerText.match(/⭐\s*([\d,]+)/);
-        const stars = starsMatch ? parseInt(starsMatch[1].replace(/,/g, '')) : 0;
-
-        skillData.push({
-          slug,
-          name,
-          description,
-          downloads,
-          stars,
-          author,
-        });
+        if (name && slug && downloads > 0) {
+          skillData.push({
+            slug,
+            name,
+            description: description.substring(0, 200),
+            downloads,
+            stars,
+            author,
+          });
+        }
       });
 
       return skillData;
@@ -170,7 +199,7 @@ ${skillsCards}
     const totalDownloads = 13100000;
     const totalStars = 222000;
 
-    const statsBarMatch = html.match(/<div class="stats-bar">[\s\S]*?<\/div>\s*<\/div>\s*<\/header>/);
+    const statsBarMatch = html.match(/<div class="stats-bar">[\s\S]*?<\/div>\s*<\/header>/);
     if (statsBarMatch) {
       const newStatsBar = `<div class="stats-bar">
         <div class="stat-item">

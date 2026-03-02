@@ -1490,7 +1490,7 @@ const INDEX_HTML = `<!DOCTYPE html>
       const bottomLoader = document.getElementById('bottom-loader');
       const skillsGrid = document.querySelector('.skills-grid');
       let isLoading = false;
-      let offset = 41; // Start after initial 41 skills
+      let offset = 15; // Start after initial 15 skills
       let hasMore = true;
       const LIMIT = 20;
       
@@ -1512,8 +1512,8 @@ const INDEX_HTML = `<!DOCTYPE html>
             
             if (data.skills && data.skills.length > 0) {
               // Add new skills to grid
-              data.skills.forEach(skill => {
-                const card = createSkillCard(skill, offset + 1);
+              data.skills.forEach((skill, index) => {
+                const card = createSkillCard(skill, offset + index + 1);
                 skillsGrid.appendChild(card);
               });
               
