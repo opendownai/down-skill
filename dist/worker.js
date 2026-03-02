@@ -4,25 +4,33 @@ const INDEX_HTML = `<!DOCTYPE html>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OpenDown — We are on the verge of the Singularity.</title>
-  <meta name="description" content="Discover the most popular AI Agent skills for OpenClaw. Browse curated top skills with real download statistics from ClawHub.">
-  <meta name="keywords" content="OpenClaw, AI Agent, Skills, Plugins, Extensions, Downloads">
+  <meta name="description" content="Curated top AI Agent skills for OpenClaw/ClawHub – ranked by real downloads & stars. Install instantly with npx clawhub@latest. 13K+ skills, 243K+ stars.">
+  <meta name="keywords" content="OpenClaw, ClawHub, AI Agent, Skills, Plugins, Extensions, Downloads, Stars, LLM, Claude, GPT, AI Agents">
   
-  <meta property="og:title" content="OpenDown - ClawHub Top Skills">
-  <meta property="og:description" content="Discover the most popular AI Agent skills for OpenClaw. Based on real download statistics.">
+  <meta property="og:title" content="OpenDown – ClawHub Top AI Agent Skills">
+  <meta property="og:description" content="Discover the most popular AI agent skills with 13K+ indexed, 243K+ stars. Install instantly with npx clawhub@latest.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://opendown.ai">
-  <meta property="og:image" content="https://cdn.opendown.ai/opendown-logo.png">
+  <meta property="og:image" content="https://cdn.opendown.ai/opendown-ai-2.png">
   <meta property="og:image:width" content="512">
   <meta property="og:image:height" content="512">
   <meta property="og:image:alt" content="OpenDown - ClawHub Top Skills">
+  <meta property="og:site_name" content="OpenDown">
   <meta property="og:locale" content="en_US">
   
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="OpenDown - ClawHub Top Skills">
-  <meta name="twitter:description" content="Discover the most popular AI Agent skills for OpenClaw.">
-  <meta name="twitter:image" content="https://cdn.opendown.ai/opendown-logo.png">
+  <meta name="twitter:title" content="OpenDown – ClawHub Top AI Agent Skills">
+  <meta name="twitter:description" content="Curated leaderboard of top ClawHub skills – 13K+ indexed, 243K+ stars. Install with npx clawhub@latest">
+  <meta name="twitter:image" content="https://cdn.opendown.ai/opendown-ai-2.png">
+  <meta name="twitter:site" content="@opendownai">
+  <meta name="twitter:creator" content="@opendownai">
   
-  <link rel="icon" type="image/x-icon" href="https://cdn.opendown.ai/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon.png">
+  <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.json">
   <meta name="theme-color" content="#0a0a0f">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -391,6 +399,37 @@ const INDEX_HTML = `<!DOCTYPE html>
       margin-top: 4px;
     }
 
+    .suggest-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 32px;
+      padding: 12px 24px;
+      background: linear-gradient(135deg, rgba(0, 245, 255, 0.15), rgba(139, 92, 246, 0.15));
+      border: 1px solid rgba(0, 245, 255, 0.3);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-family: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+    }
+
+    .suggest-btn:hover {
+      background: linear-gradient(135deg, rgba(0, 245, 255, 0.25), rgba(139, 92, 246, 0.25));
+      border-color: var(--accent-cyan);
+      box-shadow: var(--glow-cyan);
+      transform: translateY(-2px);
+    }
+
+    .suggest-btn svg {
+      width: 18px;
+      height: 18px;
+      color: var(--accent-cyan);
+    }
+
     .search-filter {
       margin-top: 48px;
       display: flex;
@@ -461,7 +500,60 @@ const INDEX_HTML = `<!DOCTYPE html>
       color: var(--text-primary);
     }
 
-    .category-btn.active {
+    .bottom-loader {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      gap: 16px;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .bottom-loader.hidden {
+      display: none;
+    }
+
+    .feather-loader {
+      animation: featherFloat 2s ease-in-out infinite;
+    }
+
+    .feather-loader .feather {
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation: featherDraw 3s ease-in-out infinite;
+    }
+
+    .feather-loader .ring {
+      stroke: var(--accent-cyan);
+      stroke-dasharray: 200;
+      stroke-dashoffset: 200;
+      animation: ringPulse 1.5s ease-in-out infinite;
+      transform-origin: center;
+    }
+
+    @keyframes featherFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes featherDraw {
+      0% { stroke-dashoffset: 1000; }
+      50% { stroke-dashoffset: 0; }
+      100% { stroke-dashoffset: -1000; }
+    }
+
+    @keyframes ringPulse {
+      0%, 100% { 
+        stroke-opacity: 0.3;
+        transform: scale(1);
+      }
+      50% { 
+        stroke-opacity: 1;
+        transform: scale(1.1);
+      }
+    }
       background: linear-gradient(135deg, rgba(0, 245, 255, 0.2), rgba(139, 92, 246, 0.2));
       border-color: var(--accent-cyan);
       color: var(--accent-cyan);
@@ -705,6 +797,53 @@ const INDEX_HTML = `<!DOCTYPE html>
       font-size: 14px;
     }
 
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .footer-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent-cyan);
+    }
+
+    .discord-invite {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: rgba(88, 101, 242, 0.1);
+      border: 1px solid rgba(88, 101, 242, 0.3);
+      border-radius: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .discord-invite svg {
+      color: #5865F2;
+      flex-shrink: 0;
+    }
+
+    .discord-invite a {
+      color: var(--accent-cyan);
+      font-weight: 500;
+    }
+
+    .changelog {
+      font-size: 12px;
+      opacity: 0.7;
+      margin-top: 8px;
+    }
+
     footer a {
       color: var(--accent-cyan);
       text-decoration: none;
@@ -826,6 +965,14 @@ const INDEX_HTML = `<!DOCTYPE html>
           <div class="stat-label">Stars</div>
         </div>
       </div>
+      
+      <a href="https://discord.gg/gjGb5WEz" target="_blank" class="suggest-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 11l3 3L22 4"/>
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+        </svg>
+        Suggest a Skill
+      </a>
     </header>
 
     <div class="search-filter">
@@ -1148,6 +1295,20 @@ const INDEX_HTML = `<!DOCTYPE html>
         </div>
       </article>
     </div>
+
+    <div id="bottom-loader" class="bottom-loader hidden">
+      <svg class="feather-loader" width="48" height="72" viewBox="0 0 200 300">
+        <circle class="ring" cx="100" cy="150" r="80" fill="none" stroke-width="2"/>
+        <path class="feather" d="M60 220 Q80 180 100 150 Q120 120 160 60 Q180 40 190 30 M60 220 Q70 200 80 180 Q90 160 100 150 M100 150 Q110 130 120 110 Q130 90 140 70 M100 150 Q110 140 115 125 Q120 110 125 95" fill="none" stroke="url(#featherGradient)" stroke-width="3" stroke-linecap="round"/>
+        <defs>
+          <linearGradient id="featherGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#00f5ff"/>
+            <stop offset="100%" stop-color="#8b5cf6"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span>Loading more skills...</span>
+    </div>
   </div>
 
   <div class="terminal-hint">
@@ -1159,7 +1320,19 @@ const INDEX_HTML = `<!DOCTYPE html>
   </div>
 
   <footer>
-    <p><a href="https://github.com/opendownai" target="_blank">GitHub</a> | <a href="https://discord.gg/gjGb5WEz" target="_blank">Discord</a> | <a href="https://opendown.ai/docs" target="_blank">Docs</a> | <a href="https://www.buymeacoffee.com/opendown" target="_blank">Buy Me a Coffee</a> | Contact: <a href="mailto:support@opendown.ai">support@opendown.ai</a></p>
+    <div class="footer-links">
+      <a href="https://github.com/opendownai" target="_blank">GitHub</a>
+      <a href="https://discord.gg/gjGb5WEz" target="_blank">Discord</a>
+      <a href="https://opendown.ai/docs" target="_blank">Docs</a>
+      <a href="https://www.buymeacoffee.com/opendown" target="_blank">Buy Me a Coffee</a>
+      <a href="mailto:support@opendown.ai">Contact</a>
+    </div>
+    <p class="discord-invite">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+      Join our community to discuss skills & suggest rankings →
+      <a href="https://discord.gg/gjGb5WEz" target="_blank">discord.gg/gjGb5WEz</a>
+    </p>
+    <p class="changelog">Recently added: AI/ML category spotlight • Dev Tools expansion • Real-time stats updated daily</p>
   </footer>
   <script>
     // Theme switcher
@@ -1248,6 +1421,32 @@ const INDEX_HTML = `<!DOCTYPE html>
     }
     
     document.addEventListener('DOMContentLoaded', init);
+    
+    // Bottom loader scroll handler (demo - shows loader when scrolling to bottom)
+    (function() {
+      const bottomLoader = document.getElementById('bottom-loader');
+      let isLoading = false;
+      
+      window.addEventListener('scroll', () => {
+        if (isLoading) return;
+        
+        const scrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+        const documentHeight = document.body.offsetHeight;
+        
+        // Show loader when within 300px of bottom
+        if (scrollY + windowHeight >= documentHeight - 300) {
+          isLoading = true;
+          bottomLoader.classList.remove('hidden');
+          
+          // Simulate loading delay (remove this in production with real data)
+          setTimeout(() => {
+            bottomLoader.classList.add('hidden');
+            isLoading = false;
+          }, 1500);
+        }
+      });
+    })();
     
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js');
@@ -1433,12 +1632,13 @@ async function handleRequest(request) {
     return fetch("https://cdn.opendown.ai/favicon.ico");
   }
 
-  if (urlObject.pathname === "/api/skills") {
-    const cacheKey = new Request(`${urlObject.origin}/api/skills`);
+  if (urlObject.pathname === "/api/skills" || urlObject.pathname === "/api/top-skills") {
+    const cacheKey = new Request(`${urlObject.origin}/api/top-skills`);
+    const limit = urlObject.searchParams.get('limit') || 20;
     
     try {
       const response = await fetchWithCache(
-        `${SUPABASE_URL}/rest/v1/skills?rank=lt.100&order=rank.asc`,
+        `${SUPABASE_URL}/rest/v1/skills?rank=lt.100&order=rank.asc&limit=${limit}`,
         {
           headers: {
             'apikey': SUPABASE_KEY,
@@ -1449,17 +1649,31 @@ async function handleRequest(request) {
         cacheKey
       );
       
-      return new Response(await response.arrayBuffer(), {
-        status: response.status,
+      const data = await response.json();
+      
+      const topSkills = data.map(skill => ({
+        name: skill.name,
+        slug: skill.slug,
+        desc: skill.description,
+        author: skill.author,
+        downloads: skill.downloads,
+        stars: skill.stars,
+        category: skill.category,
+        install_cmd: `npx clawhub@latest install ${skill.slug}`
+      }));
+      
+      return new Response(JSON.stringify(topSkills), {
+        status: 200,
         headers: {
           "Content-Type": "application/json",
-          "Cache-Control": `public, max-age=${CACHE_TTL}`
+          "Cache-Control": `public, max-age=${CACHE_TTL}`,
+          "Access-Control-Allow-Origin": "*"
         },
       });
     } catch (error) {
       return new Response(JSON.stringify({ error: error.message }), {
         status: 500,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
       });
     }
   }

@@ -281,7 +281,21 @@ const INDEX_HTML = `<!DOCTYPE html>
     </button>
     <script>!function(){var t=document.getElementById("themeToggle"),e=t.querySelector(".icon-sun"),n=t.querySelector(".icon-moon");function o(o){localStorage.setItem("theme",o),"light"===o?(document.documentElement.setAttribute("data-theme","light"),e.style.display="block",n.style.display="none"):(document.documentElement.removeAttribute("data-theme"),e.style.display="none",n.style.display="block")}t.addEventListener("click",(function(){var t=document.documentElement.getAttribute("data-theme");o("light"===t?"dark":"light")}));var r=localStorage.getItem("theme")||"dark";o(r)}();function copyInstallCmd(){const t="npx clawhub@latest install ";navigator.clipboard.writeText(t).then(()=>{const e=document.querySelector('.copy-btn');e.classList.add('copied');e.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';setTimeout(()=>{e.classList.remove('copied');e.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';},2000)})}</script>
   </div>
-  <footer><p><a href="https://opendown.ai/docs" target="_blank">Documentation</a> | Contact: <a href="mailto:support@opendown.ai">support@opendown.ai</a></p></footer>
+  <footer>
+    <div class="footer-links">
+      <a href="https://github.com/opendownai" target="_blank">GitHub</a>
+      <a href="https://discord.gg/gjGb5WEz" target="_blank">Discord</a>
+      <a href="https://opendown.ai/docs" target="_blank">Docs</a>
+      <a href="https://www.buymeacoffee.com/opendown" target="_blank">Buy Me a Coffee</a>
+      <a href="mailto:support@opendown.ai">Contact</a>
+    </div>
+    <p class="discord-invite">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+      Join our community to discuss skills & suggest rankings →
+      <a href="https://discord.gg/gjGb5WEz" target="_blank">discord.gg/gjGb5WEz</a>
+    </p>
+    <p class="changelog">Recently added: AI/ML category spotlight • Dev Tools expansion • Real-time stats updated daily</p>
+  </footer>
 </body>
 </html>`;
 
@@ -461,12 +475,13 @@ async function handleRequest(request) {
     return fetch("https://cdn.opendown.ai/favicon.ico");
   }
 
-  if (urlObject.pathname === "/api/skills") {
-    const cacheKey = new Request(`${urlObject.origin}/api/skills`);
+  if (urlObject.pathname === "/api/skills" || urlObject.pathname === "/api/top-skills") {
+    const cacheKey = new Request(`${urlObject.origin}/api/top-skills`);
+    const limit = urlObject.searchParams.get('limit') || 20;
     
     try {
       const response = await fetchWithCache(
-        `${SUPABASE_URL}/rest/v1/skills?rank=lt.100&order=rank.asc`,
+        `${SUPABASE_URL}/rest/v1/skills?rank=lt.100&order=rank.asc&limit=${limit}`,
         {
           headers: {
             'apikey': SUPABASE_KEY,
@@ -477,17 +492,31 @@ async function handleRequest(request) {
         cacheKey
       );
       
-      return new Response(await response.arrayBuffer(), {
-        status: response.status,
+      const data = await response.json();
+      
+      const topSkills = data.map(skill => ({
+        name: skill.name,
+        slug: skill.slug,
+        desc: skill.description,
+        author: skill.author,
+        downloads: skill.downloads,
+        stars: skill.stars,
+        category: skill.category,
+        install_cmd: `npx clawhub@latest install ${skill.slug}`
+      }));
+      
+      return new Response(JSON.stringify(topSkills), {
+        status: 200,
         headers: {
           "Content-Type": "application/json",
-          "Cache-Control": `public, max-age=${CACHE_TTL}`
+          "Cache-Control": `public, max-age=${CACHE_TTL}`,
+          "Access-Control-Allow-Origin": "*"
         },
       });
     } catch (error) {
       return new Response(JSON.stringify({ error: error.message }), {
         status: 500,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
       });
     }
   }
