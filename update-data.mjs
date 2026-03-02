@@ -51,7 +51,7 @@ function generateSkillCard(skill, rank) {
         <div class="skill-icon">${icon}</div>
         <span class="category-tag">${skill.category}</span>
         <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/${skill.slug}" target="_blank">${skill.name}</a>
+          <a href="https://clawhub.ai/skills/${skill.name.toLowerCase().replace(/\s+/g, '-')}" target="_blank">${skill.name}</a>
         </h2>
         <p class="skill-desc">${skill.description}</p>
         <div class="skill-meta">
@@ -106,7 +106,7 @@ async function scrapeAndUpdate() {
 
       cards.forEach(card => {
         const href = card.getAttribute('href');
-        const slug = href.replace('/', '');
+        const slug = href.split('/').pop();
         
         const titleEl = card.querySelector('.skill-card-title');
         const name = titleEl?.textContent?.trim() || '';
