@@ -526,8 +526,9 @@ async function handleRequest(request) {
     const limit = parseInt(urlObject.searchParams.get('limit') || '20');
     
     try {
+      // Get all skills ordered by rank, then slice by offset/limit
       const response = await fetch(
-        `${SUPABASE_URL}/rest/v1/skills?rank=gt.100&order=rank.asc&offset=${offset}&limit=${limit}`,
+        `${SUPABASE_URL}/rest/v1/skills?order=rank.asc&offset=${offset}&limit=${limit}`,
         {
           headers: {
             'apikey': SUPABASE_KEY,

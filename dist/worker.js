@@ -1490,12 +1490,9 @@ const INDEX_HTML = `<!DOCTYPE html>
       const bottomLoader = document.getElementById('bottom-loader');
       const skillsGrid = document.querySelector('.skills-grid');
       let isLoading = false;
-      let offset = 0;
+      let offset = 41; // Start after initial 41 skills
       let hasMore = true;
       const LIMIT = 20;
-      
-      // Initial skills count (top 100)
-      offset = 100;
       
       window.addEventListener('scroll', async () => {
         if (isLoading || !hasMore) return;
@@ -1770,8 +1767,9 @@ async function handleRequest(request) {
     const limit = parseInt(urlObject.searchParams.get('limit') || '20');
     
     try {
+      // Get all skills ordered by rank, then slice by offset/limit
       const response = await fetch(
-        `${SUPABASE_URL}/rest/v1/skills?rank=gt.100&order=rank.asc&offset=${offset}&limit=${limit}`,
+        `${SUPABASE_URL}/rest/v1/skills?order=rank.asc&offset=${offset}&limit=${limit}`,
         {
           headers: {
             'apikey': SUPABASE_KEY,
