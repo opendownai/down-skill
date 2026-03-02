@@ -906,7 +906,7 @@ const INDEX_HTML = `<!DOCTYPE html>
   </div>
 
   <div class="terminal-hint">
-    Install: <span>clawdhub install &lt;skill-name&gt;</span>
+    Install: <span>npx clawhub@latest install &lt;skill-name&gt;</span>
   </div>
 
   <footer>
