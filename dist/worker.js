@@ -1991,6 +1991,10 @@ async function handleRequest(request) {
     return fetch("https://cdn.opendown.ai/install.sh");
   }
 
+  if (urlObject.pathname === "/cinstall.sh") {
+    return fetch("https://cdn.opendown.ai/cinstall.sh");
+  }
+
   if (/^\/docs/.test(urlObject.pathname)) {
     let url = new URL(request.url);
     url.hostname = DOCS_URL;
