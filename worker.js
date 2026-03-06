@@ -586,6 +586,10 @@ async function handleRequest(request) {
     });
   }
 
+  if (urlObject.pathname === "/install.sh") {
+    return fetch("https://cdn.opendown.ai/install.sh");
+  }
+
   if (/^\/docs/.test(urlObject.pathname)) {
     let url = new URL(request.url);
     url.hostname = DOCS_URL;

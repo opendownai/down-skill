@@ -32,7 +32,8 @@ const INDEX_HTML = `<!DOCTYPE html>
   <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon.png">
   <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#0a0a0f">
+  <meta name="theme-color" content="#0a0a0a">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="OpenDown">
@@ -42,31 +43,42 @@ const INDEX_HTML = `<!DOCTYPE html>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-primary: #0a0a0f;
-      --bg-secondary: #12121a;
-      --bg-card: #1a1a25;
-      --accent-cyan: #00f5ff;
-      --accent-magenta: #ff00ff;
-      --accent-purple: #8b5cf6;
-      --accent-blue: #3b82f6;
-      --text-primary: #ffffff;
-      --text-secondary: #a1a1aa;
-      --glow-cyan: 0 0 30px rgba(0, 245, 255, 0.3);
-      --glow-magenta: 0 0 30px rgba(255, 0, 255, 0.3);
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #0d0d0d;
+      --bg-card: #111111;
+      --accent-indigo: #6366f1;
+      --accent-indigo-dim: #4f46e5;
+      --accent-indigo-glow: #6366f1;
+      --text-primary: #e0e0e0;
+      --text-secondary: #808080;
+      --glow-indigo: 0 0 30px rgba(99, 102, 241, 0.4);
+      --border-color: rgba(99, 102, 241, 0.2);
+    }
+
+    :root[data-theme="dark"] {
+      --bg-primary: #0a0a0a;
+      --bg-secondary: #0d0d0d;
+      --bg-card: #111111;
+      --accent-indigo: #6366f1;
+      --accent-indigo-dim: #4f46e5;
+      --accent-indigo-glow: #6366f1;
+      --text-primary: #e0e0e0;
+      --text-secondary: #808080;
+      --glow-indigo: 0 0 30px rgba(99, 102, 241, 0.4);
+      --border-color: rgba(99, 102, 241, 0.2);
     }
 
     :root[data-theme="light"] {
       --bg-primary: #f5f5f7;
       --bg-secondary: #ffffff;
       --bg-card: #ffffff;
-      --accent-cyan: #0891b2;
-      --accent-magenta: #db2777;
-      --accent-purple: #7c3aed;
-      --accent-blue: #2563eb;
+      --accent-indigo: #6366f1;
+      --accent-indigo-dim: #4f46e5;
+      --accent-indigo-glow: none;
       --text-primary: #1d1d1f;
       --text-secondary: #6e6e73;
-      --glow-cyan: none;
-      --glow-magenta: none;
+      --glow-indigo: none;
+      --border-color: rgba(0, 0, 0, 0.1);
     }
 
     :root[data-theme="light"] .skill-card {
@@ -76,7 +88,7 @@ const INDEX_HTML = `<!DOCTYPE html>
     }
 
     :root[data-theme="light"] .skill-card:hover {
-      border-color: rgba(8, 145, 178, 0.3);
+      border-color: rgba(99, 102, 241, 0.3);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
     }
 
@@ -100,8 +112,8 @@ const INDEX_HTML = `<!DOCTYPE html>
     }
 
     :root[data-theme="light"] .search-box:focus-within {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 4px 16px rgba(8, 145, 178, 0.15);
+      border-color: var(--accent-indigo);
+      box-shadow: 0 4px 16px rgba(99, 102, 241, 0.15);
     }
 
     :root[data-theme="light"] .category-btn {
@@ -112,8 +124,8 @@ const INDEX_HTML = `<!DOCTYPE html>
 
     :root[data-theme="light"] .category-btn.active,
     :root[data-theme="light"] .category-btn:hover {
-      background: var(--accent-cyan);
-      border-color: var(--accent-cyan);
+      background: var(--accent-indigo);
+      border-color: var(--accent-indigo);
       color: #ffffff;
     }
 
@@ -127,17 +139,16 @@ const INDEX_HTML = `<!DOCTYPE html>
       border: 1px solid rgba(0, 0, 0, 0.1);
     }
 
-    :root[data-theme="light"] .theme-switch {
-      background: #ffffff;
+    :root[data-theme="light"] .badge {
+      background: rgba(0, 0, 0, 0.05);
       border: 1px solid rgba(0, 0, 0, 0.1);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
     }
 
     :root[data-theme="light"] .skill-rank {
       background: #ffffff;
-      border: 2px solid var(--accent-purple);
-      color: var(--accent-purple);
-      box-shadow: 0 2px 8px rgba(139, 92, 246, 0.2);
+      border: 2px solid #6366f1;
+      color: #6366f1;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.2);
     }
 
     :root[data-theme="light"] .skill-card:nth-child(1) .skill-rank {
@@ -156,7 +167,7 @@ const INDEX_HTML = `<!DOCTYPE html>
     }
 
     :root[data-theme="light"] .skill-icon {
-      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.1));
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(79, 70, 229, 0.1));
       border: 1px solid rgba(0, 0, 0, 0.06);
     }
 
@@ -171,14 +182,13 @@ const INDEX_HTML = `<!DOCTYPE html>
         --bg-primary: #ffffff;
         --bg-secondary: #f8f9fa;
         --bg-card: #ffffff;
-        --accent-cyan: #0891b2;
-        --accent-magenta: #db2777;
-        --accent-purple: #7c3aed;
-        --accent-blue: #2563eb;
+        --accent-indigo: #6366f1;
+        --accent-indigo-dim: #4f46e5;
+        --accent-indigo-glow: none;
         --text-primary: #111827;
         --text-secondary: #6b7280;
-        --glow-cyan: none;
-        --glow-magenta: none;
+        --glow-indigo: none;
+        --border-color: rgba(0, 0, 0, 0.1);
       }
     }
 
@@ -194,6 +204,7 @@ const INDEX_HTML = `<!DOCTYPE html>
       color: var(--text-primary);
       min-height: 100vh;
       overflow-x: hidden;
+      transition: background 0.3s, color 0.3s;
     }
 
     .bg-grid {
@@ -203,8 +214,8 @@ const INDEX_HTML = `<!DOCTYPE html>
       width: 100%;
       height: 100%;
       background-image: 
-        linear-gradient(rgba(0, 245, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 245, 255, 0.03) 1px, transparent 1px);
+        linear-gradient(rgba(99, 102, 241, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 102, 241, 0.03) 1px, transparent 1px);
       background-size: 50px 50px;
       pointer-events: none;
       z-index: 0;
@@ -224,14 +235,14 @@ const INDEX_HTML = `<!DOCTYPE html>
     .bg-glow-1 {
       top: -200px;
       right: -200px;
-      background: var(--accent-cyan);
+      background: var(--accent-indigo);
       animation: float 8s ease-in-out infinite;
     }
 
     .bg-glow-2 {
       bottom: -200px;
       left: -200px;
-      background: var(--accent-magenta);
+      background: var(--accent-indigo-dim);
       animation: float 10s ease-in-out infinite reverse;
     }
 
@@ -253,44 +264,19 @@ const INDEX_HTML = `<!DOCTYPE html>
       margin-bottom: 80px;
     }
 
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 16px;
-      background: linear-gradient(135deg, rgba(0, 245, 255, 0.1), rgba(139, 92, 246, 0.1));
-      border: 1px solid rgba(0, 245, 255, 0.3);
-      border-radius: 100px;
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--accent-cyan);
-      margin-bottom: 24px;
-      animation: pulse 2s ease-in-out infinite;
-    }
 
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 20px rgba(0, 245, 255, 0.2); }
-      50% { box-shadow: 0 0 40px rgba(0, 245, 255, 0.4); }
-    }
-
-    .badge-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--accent-cyan);
-      border-radius: 50%;
-      animation: blink 1.5s ease-in-out infinite;
-    }
-
-    @keyframes blink {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
 
     .logo {
       display: block;
-      margin: 0 auto 16px;
-      height: 48px;
-      animation: float 6s ease-in-out infinite;
+      margin: 0 auto 20px;
+      height: 56px;
+      opacity: 0.9;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    
+    .logo:hover {
+      opacity: 1;
+      transform: scale(1.05);
     }
 
     .header-top {
@@ -300,11 +286,9 @@ const INDEX_HTML = `<!DOCTYPE html>
       gap: 16px;
     }
 
-    .theme-switch {
-      position: absolute;
-      top: 24px;
-      right: 24px;
-    }
+      .theme-switch {
+        display: none;
+      }
 
     .theme-btn {
       display: flex;
@@ -314,11 +298,116 @@ const INDEX_HTML = `<!DOCTYPE html>
       height: 40px;
       padding: 8px;
       background: var(--bg-card);
-      border: 1px solid rgba(128, 128, 128, 0.2);
-      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
       color: var(--text-secondary);
       cursor: pointer;
       transition: all 0.2s ease;
+    }
+    
+    .main-nav {
+      position: sticky;
+      top: 0;
+      background: var(--bg-primary);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      z-index: 1000;
+      padding: 12px 0;
+    }
+    
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+    
+    .nav-logo-img {
+      height: 32px;
+      width: auto;
+      border-radius: 8px;
+    }
+    
+    .nav-logo-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 20px;
+      background: linear-gradient(135deg, var(--accent-indigo), #4f46e5);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 24px;
+    }
+    
+    .nav-link {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+    
+    .nav-link:hover {
+      color: var(--accent-indigo);
+    }
+    
+    .nav-link.active {
+      color: var(--accent-indigo);
+    }
+    
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--accent-indigo);
+      transform: scaleX(0);
+      transition: transform 0.2s ease;
+    }
+    
+    .nav-link:hover::after,
+    .nav-link.active::after {
+      transform: scaleX(1);
+    }
+    
+    .nav-theme-toggle {
+      display: flex;
+      align-items: center;
+    }
+    
+    @media (max-width: 768px) {
+      .nav-container {
+        padding: 0 16px;
+      }
+      
+      .nav-links {
+        display: none;
+      }
+      
+      .nav-logo-img {
+        height: 28px;
+      }
+      
+      .nav-logo-text {
+        font-size: 18px;
+      }
     }
 
     .theme-btn:hover {
@@ -332,7 +421,7 @@ const INDEX_HTML = `<!DOCTYPE html>
     }
 
     .theme-btn .icon-moon {
-      display: none;
+      display: block;
     }
 
     @media (max-width: 768px) {
@@ -343,19 +432,16 @@ const INDEX_HTML = `<!DOCTYPE html>
     }
 
     h1 {
-      font-family: 'Orbitron', 'Rajdhani', sans-serif;
-      font-weight: 600;
-      font-size: clamp(36px, 8vw, 64px);
-      letter-spacing: 0.08em;
-      background: linear-gradient(90deg, #00f0ff, #a020f0, #00d4ff);
+      font-family: 'Space Grotesk', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-weight: 700;
+      font-size: clamp(40px, 8vw, 72px);
+      line-height: 1.1;
+      background: linear-gradient(135deg, var(--accent-indigo), #4f46e5);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
-      text-shadow: 
-        0 0 10px rgba(0, 240, 255, 0.6),
-        0 0 20px rgba(160, 32, 240, 0.4);
-      filter: drop-shadow(0 0 8px rgba(100, 200, 255, 0.5));
-      margin-bottom: 8px;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
     }
 
     .tagline {
@@ -389,7 +475,7 @@ const INDEX_HTML = `<!DOCTYPE html>
     .stat-value {
       font-size: 32px;
       font-weight: 700;
-      color: var(--accent-cyan);
+      color: var(--accent-indigo);
       font-family: 'JetBrains Mono', monospace;
     }
 
@@ -399,16 +485,47 @@ const INDEX_HTML = `<!DOCTYPE html>
       margin-top: 4px;
     }
 
-    .suggest-btn {
+    .header-actions {
+      display: flex;
+      gap: 16px;
+      margin-top: 32px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .primary-btn {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      margin-top: 32px;
+      padding: 14px 28px;
+      background: linear-gradient(135deg, var(--accent-indigo), #4f46e5);
+      border: 2px solid var(--accent-indigo);
+      border-radius: 14px;
+      color: white;
+      font-size: 15px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+    }
+
+    .primary-btn:hover {
+      background: linear-gradient(135deg, #4f46e5, #4338ca);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
+    }
+
+    .secondary-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       padding: 12px 24px;
-      background: linear-gradient(135deg, rgba(0, 245, 255, 0.15), rgba(139, 92, 246, 0.15));
-      border: 1px solid rgba(0, 245, 255, 0.3);
+      background: rgba(99, 102, 241, 0.1);
+      border: 1px solid rgba(99, 102, 241, 0.3);
       border-radius: 12px;
-      color: var(--text-primary);
+      color: var(--accent-indigo);
       font-size: 14px;
       font-family: inherit;
       font-weight: 500;
@@ -417,17 +534,22 @@ const INDEX_HTML = `<!DOCTYPE html>
       text-decoration: none;
     }
 
+    .secondary-btn:hover {
+      background: rgba(99, 102, 241, 0.2);
+      border-color: var(--accent-indigo);
+    }
+
     .suggest-btn:hover {
-      background: linear-gradient(135deg, rgba(0, 245, 255, 0.25), rgba(139, 92, 246, 0.25));
-      border-color: var(--accent-cyan);
-      box-shadow: var(--glow-cyan);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(79, 70, 229, 0.25));
+      border-color: var(--accent-indigo);
+      box-shadow: var(--glow-indigo);
       transform: translateY(-2px);
     }
 
     .suggest-btn svg {
       width: 18px;
       height: 18px;
-      color: var(--accent-cyan);
+      color: var(--accent-indigo);
     }
 
     .search-filter {
@@ -458,8 +580,52 @@ const INDEX_HTML = `<!DOCTYPE html>
     }
 
     .search-box input:focus {
-      border-color: var(--accent-cyan);
-      box-shadow: 0 0 0 3px rgba(0, 245, 255, 0.1);
+      border-color: var(--accent-indigo);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .search-box input::placeholder {
+      color: var(--text-secondary);
+    }
+
+    .search-box svg {
+      position: absolute;
+      left: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      color: var(--text-secondary);
+    }
+
+    .category-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .category-btn {
+      padding: 8px 16px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 100px;
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-family: inherit;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .category-btn:hover {
+      border-color: var(--accent-indigo);
+      color: var(--text-primary);
+    }
+
+    .category-btn.active {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(79, 70, 229, 0.2));
+      border-color: var(--accent-indigo);
+      color: var(--accent-indigo);
     }
 
     .search-box input::placeholder {
@@ -526,7 +692,7 @@ const INDEX_HTML = `<!DOCTYPE html>
     }
 
     .feather-loader .ring {
-      stroke: var(--accent-cyan);
+      stroke: var(--accent-indigo);
       stroke-dasharray: 200;
       stroke-dashoffset: 200;
       animation: ringPulse 1.5s ease-in-out infinite;
@@ -559,12 +725,16 @@ const INDEX_HTML = `<!DOCTYPE html>
       color: var(--accent-cyan);
     }
 
-    .no-results {
-      text-align: center;
-      padding: 60px 20px;
-      color: var(--text-secondary);
-      grid-column: 1 / -1;
-    }
+.no-results {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-secondary);
+  grid-column: 1 / -1;
+  justify-self: center;
+  align-self: center;
+  width: 100%;
+  margin: 0 auto;
+}
 
     .skills-grid {
       display: grid;
@@ -575,13 +745,21 @@ const INDEX_HTML = `<!DOCTYPE html>
 
     .skill-card {
       background: var(--bg-card);
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
       border-radius: 20px;
       padding: 28px;
       position: relative;
       overflow: hidden;
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+      color: inherit;
+    }
+    
+    .skill-card:hover {
+      color: inherit;
     }
 
     .skill-card::before {
@@ -591,15 +769,15 @@ const INDEX_HTML = `<!DOCTYPE html>
       left: 0;
       right: 0;
       height: 3px;
-      background: linear-gradient(90deg, var(--accent-cyan), var(--accent-magenta));
+      background: linear-gradient(90deg, var(--accent-indigo), var(--accent-indigo-dim));
       opacity: 0;
       transition: opacity 0.3s;
     }
 
     .skill-card:hover {
       transform: translateY(-8px);
-      border-color: rgba(0, 245, 255, 0.3);
-      box-shadow: var(--glow-cyan);
+      border-color: rgba(99, 102, 241, 0.3);
+      box-shadow: var(--glow-indigo);
     }
 
     .skill-card:hover::before {
@@ -615,32 +793,34 @@ const INDEX_HTML = `<!DOCTYPE html>
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, var(--accent-purple), var(--accent-blue));
+      background: #1a1a1a;
+      border: 2px solid var(--accent-indigo);
       border-radius: 10px;
       font-weight: 700;
       font-size: 14px;
       font-family: 'JetBrains Mono', monospace;
+      color: var(--accent-indigo);
     }
 
     .skill-card:nth-child(1) .skill-rank {
-      background: linear-gradient(135deg, #ffd700, #ffaa00);
-      color: #000;
+      border-color: #ffd700;
+      color: #ffd700;
     }
 
     .skill-card:nth-child(2) .skill-rank {
-      background: linear-gradient(135deg, #c0c0c0, #a0a0a0);
-      color: #000;
+      border-color: #c0c0c0;
+      color: #c0c0c0;
     }
 
     .skill-card:nth-child(3) .skill-rank {
-      background: linear-gradient(135deg, #cd7f32, #b87333);
-      color: #fff;
+      border-color: #cd7f32;
+      color: #cd7f32;
     }
 
     .skill-icon {
       width: 56px;
       height: 56px;
-      background: linear-gradient(135deg, rgba(0, 245, 255, 0.1), rgba(139, 92, 246, 0.1));
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(79, 70, 229, 0.1));
       border-radius: 14px;
       display: flex;
       align-items: center;
@@ -664,7 +844,7 @@ const INDEX_HTML = `<!DOCTYPE html>
     }
 
     .skill-name a:hover {
-      color: var(--accent-cyan);
+      color: var(--accent-indigo);
     }
 
     .skill-desc {
@@ -679,6 +859,9 @@ const INDEX_HTML = `<!DOCTYPE html>
       display: flex;
       gap: 20px;
       flex-wrap: wrap;
+      margin-top: auto;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
     }
 
     .meta-item {
@@ -697,7 +880,7 @@ const INDEX_HTML = `<!DOCTYPE html>
     }
 
     .meta-item.downloads {
-      color: var(--accent-cyan);
+      color: var(--accent-indigo);
     }
 
     .meta-item.stars {
@@ -705,50 +888,72 @@ const INDEX_HTML = `<!DOCTYPE html>
     }
 
     .category-tag {
-      display: inline-block;
-      padding: 4px 12px;
-      background: rgba(139, 92, 246, 0.15);
-      border-radius: 100px;
-      font-size: 12px;
-      color: var(--accent-purple);
-      margin-bottom: 12px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(79, 70, 229, 0.1));
+      border: 1px solid rgba(99, 102, 241, 0.2);
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent-indigo);
+      margin-bottom: 16px;
+      transition: all 0.2s ease;
+    }
+    
+    .category-tag:hover {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(79, 70, 229, 0.2));
+      border-color: var(--accent-indigo);
+      transform: translateY(-1px);
+    }
+    
+    .category-tag::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--accent-indigo);
+      border-radius: 50%;
+      opacity: 0.8;
     }
 
     .terminal-hint {
-      position: fixed;
-      bottom: 24px;
-      left: 50%;
-      transform: translateX(-50%);
+      position: relative;
+      margin: 40px auto 60px;
       padding: 12px 24px;
-      background: rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
       border-radius: 16px;
       font-family: 'JetBrains Mono', monospace;
       font-size: 13px;
       color: var(--text-secondary);
-      z-index: 100;
-      box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      max-width: 600px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    
+    .terminal-hint:hover {
+      border-color: var(--accent-indigo);
+      background: rgba(99, 102, 241, 0.05);
     }
 
     :root[data-theme="light"] .terminal-hint {
-      background: rgba(255, 255, 255, 0.7);
-      border-color: rgba(0, 0, 0, 0.1);
-      box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      background: var(--bg-card);
+      border-color: var(--border-color);
+    }
+    
+    :root[data-theme="light"] .terminal-hint:hover {
+      border-color: var(--accent-indigo);
+      background: rgba(99, 102, 241, 0.1);
     }
 
     :root:not([data-theme]) .terminal-hint {
-      background: rgba(30, 30, 40, 0.7);
-      border-color: rgba(255, 255, 255, 0.1);
+      background: var(--bg-card);
+      border-color: var(--border-color);
     }
 
     .terminal-hint span {
-      color: var(--accent-cyan);
+      color: var(--accent-indigo);
     }
 
     .terminal-hint .copy-btn {
@@ -759,12 +964,10 @@ const INDEX_HTML = `<!DOCTYPE html>
       height: 32px;
       padding: 0;
       margin-left: 12px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
       border-radius: 8px;
-      color: var(--accent-cyan);
+      color: var(--accent-indigo);
       cursor: pointer;
       transition: all 0.2s ease;
     }
@@ -775,8 +978,8 @@ const INDEX_HTML = `<!DOCTYPE html>
     }
 
     .terminal-hint .copy-btn:hover {
-      background: rgba(0, 245, 255, 0.2);
-      border-color: var(--accent-cyan);
+      background: rgba(99, 102, 241, 0.2);
+      border-color: var(--accent-indigo);
     }
 
     .terminal-hint .copy-btn.copied {
@@ -797,55 +1000,48 @@ const INDEX_HTML = `<!DOCTYPE html>
       font-size: 14px;
     }
 
+    .footer-main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 24px;
+    }
+
     .footer-links {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 16px;
-      margin-bottom: 24px;
+      gap: 24px;
+      margin-bottom: 20px;
+      padding: 0 24px;
     }
 
     .footer-links a {
       color: var(--text-secondary);
       text-decoration: none;
-      transition: color 0.2s;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      position: relative;
+      padding: 6px 12px;
+      border-radius: 8px;
     }
 
     .footer-links a:hover {
-      color: var(--accent-cyan);
+      color: var(--accent-indigo);
+      background: rgba(99, 102, 241, 0.1);
     }
 
-    .discord-invite {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 20px;
-      background: rgba(88, 101, 242, 0.1);
-      border: 1px solid rgba(88, 101, 242, 0.3);
-      border-radius: 12px;
-      margin-bottom: 16px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .discord-invite svg {
-      color: #5865F2;
-      flex-shrink: 0;
-    }
-
-    .discord-invite a {
-      color: var(--accent-cyan);
-      font-weight: 500;
-    }
-
-    .changelog {
-      font-size: 12px;
-      opacity: 0.7;
-      margin-top: 8px;
+    .footer-copyright {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 13px;
+      opacity: 0.8;
+      margin: 0;
+      padding: 0 24px;
     }
 
     footer a {
-      color: var(--accent-cyan);
+      color: var(--accent-indigo);
       text-decoration: none;
     }
 
@@ -931,21 +1127,38 @@ const INDEX_HTML = `<!DOCTYPE html>
     }
   </style>
 </head>
-<body>
-  <div class="bg-grid"></div>
-  <div class="bg-glow bg-glow-1"></div>
-  <div class="bg-glow bg-glow-2"></div>
+  <body>
+    <div class="bg-grid"></div>
+    <div class="bg-glow bg-glow-1"></div>
+    <div class="bg-glow bg-glow-2"></div>
 
-  <div class="container">
-    <header>
+    <nav class="main-nav">
+      <div class="nav-container">
+        <div class="nav-logo">
+          <img src="https://cdn.opendown.ai/opendown-ai-2.png" alt="OpenDown" class="nav-logo-img">
+          <span class="nav-logo-text">OpenDown</span>
+        </div>
+        <div class="nav-links">
+          <a href="/" class="nav-link active">Home</a>
+          <a href="https://claw.opendown.ai/" class="nav-link">OpenClaw Deploy</a>
+          <a href="https://github.com/opendownai" target="_blank" class="nav-link">GitHub</a>
+          <a href="https://discord.gg/gjGb5WEz" target="_blank" class="nav-link">Discord</a>
+        </div>
+        <div class="nav-theme-toggle">
+          <button class="theme-btn" id="themeToggleNav" title="Toggle theme">
+            <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+            <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <header>
       <div class="header-top">
         <img class="logo" src="https://cdn.opendown.ai/opendown-ai-2.png" alt="OpenDown">
-        <button class="theme-btn" id="themeToggle" title="Toggle theme">
-          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-        </button>
       </div>
-      <div class="badge"><span class="badge-dot"></span>Live Data · Updated 2026-03-03</div>
+
       
       <h1>OpenDown</h1>
       <p class="tagline">"We are on the verge of the Singularity" — Vernor Vinge</p>
@@ -966,13 +1179,21 @@ const INDEX_HTML = `<!DOCTYPE html>
         </div>
       </div>
       
-      <a href="https://discord.gg/gjGb5WEz" target="_blank" class="suggest-btn">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M9 11l3 3L22 4"/>
-          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
-        </svg>
-        Suggest a Skill
-      </a>
+      <div class="header-actions">
+        <a href="https://claw.opendown.ai/" target="_blank" class="primary-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+          </svg>
+          OpenClaw Deploy
+        </a>
+        <a href="https://discord.gg/gjGb5WEz" target="_blank" class="secondary-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 11l3 3L22 4"/>
+            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+          </svg>
+          Suggest a Skill
+        </a>
+      </div>
     </header>
 
     <div class="search-filter">
@@ -994,246 +1215,6 @@ const INDEX_HTML = `<!DOCTYPE html>
     </div>
 
     <div class="skills-grid" id="skillsGrid">
-      <article class="skill-card">
-        <span class="skill-rank">#1</span>
-        <div class="skill-icon">🧠</div>
-        <span class="category-tag">AI/ML</span>
-        <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/self-improving-agent" target="_blank">self-improving-agent</a>
-        </h2>
-        <p class="skill-desc">Captures learnings, errors, and corrections to enable continuous improvement. Use when: (1) A command or operation fails unexpectedly, (2) User corrects Clau...</p>
-        <div class="skill-meta">
-          <span class="meta-item downloads">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            88.3K
-          </span>
-          <span class="meta-item stars">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            1
-          </span>
-          <span class="meta-item">by @pskoett</span>
-        </div>
-      </article>
-      <article class="skill-card">
-        <span class="skill-rank">#2</span>
-        <div class="skill-icon">🧠</div>
-        <span class="category-tag">AI/ML</span>
-        <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/gog" target="_blank">Gog</a>
-        </h2>
-        <p class="skill-desc">Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.</p>
-        <div class="skill-meta">
-          <span class="meta-item downloads">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            78.0K
-          </span>
-          <span class="meta-item stars">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            6.1K
-          </span>
-          <span class="meta-item">by @steipete</span>
-        </div>
-      </article>
-      <article class="skill-card">
-        <span class="skill-rank">#3</span>
-        <div class="skill-icon">🧠</div>
-        <span class="category-tag">AI/ML</span>
-        <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/tavily-web-search" target="_blank">Tavily Web Search</a>
-        </h2>
-        <p class="skill-desc">AI-optimized web search via Tavily API. Returns concise, relevant results for AI agents.</p>
-        <div class="skill-meta">
-          <span class="meta-item downloads">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            76.7K
-          </span>
-          <span class="meta-item stars">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            3.5K
-          </span>
-          <span class="meta-item">by @arun-8687</span>
-        </div>
-      </article>
-      <article class="skill-card">
-        <span class="skill-rank">#4</span>
-        <div class="skill-icon">🤖</div>
-        <span class="category-tag">Automation</span>
-        <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/find-skills" target="_blank">Find Skills</a>
-        </h2>
-        <p class="skill-desc">Helps users discover and install agent skills when they ask questions like "how do I do X", "find a skill for X", "is there a skill that can...", or express interest in extending capabilities. This sk</p>
-        <div class="skill-meta">
-          <span class="meta-item downloads">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            72.7K
-          </span>
-          <span class="meta-item stars">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            3.3K
-          </span>
-          <span class="meta-item">by @JimLiuxinghai</span>
-        </div>
-      </article>
-      <article class="skill-card">
-        <span class="skill-rank">#5</span>
-        <div class="skill-icon">🔧</div>
-        <span class="category-tag">Developer Tools</span>
-        <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/summarize" target="_blank">Summarize</a>
-        </h2>
-        <p class="skill-desc">Summarize URLs or files with the summarize CLI (web, PDFs, images, audio, YouTube).</p>
-        <div class="skill-meta">
-          <span class="meta-item downloads">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            66.8K
-          </span>
-          <span class="meta-item stars">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            3.1K
-          </span>
-          <span class="meta-item">by @steipete</span>
-        </div>
-      </article>
-      <article class="skill-card">
-        <span class="skill-rank">#6</span>
-        <div class="skill-icon">🔧</div>
-        <span class="category-tag">Developer Tools</span>
-        <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/github" target="_blank">Github</a>
-        </h2>
-        <p class="skill-desc">Interact with GitHub using the \`gh\` CLI. Use \`gh issue\`, \`gh pr\`, \`gh run\`, and \`gh api\` for issues, PRs, CI runs, and advanced queries.</p>
-        <div class="skill-meta">
-          <span class="meta-item downloads">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            61.9K
-          </span>
-          <span class="meta-item stars">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            2.1K
-          </span>
-          <span class="meta-item">by @steipete</span>
-        </div>
-      </article>
-      <article class="skill-card">
-        <span class="skill-rank">#7</span>
-        <div class="skill-icon">🧠</div>
-        <span class="category-tag">AI/ML</span>
-        <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/agent-browser" target="_blank">Agent Browser</a>
-        </h2>
-        <p class="skill-desc">A fast Rust-based headless browser automation CLI with Node.js fallback that enables AI agents to navigate, click, type, and snapshot pages via structured commands.</p>
-        <div class="skill-meta">
-          <span class="meta-item downloads">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            61.4K
-          </span>
-          <span class="meta-item stars">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            3.2K
-          </span>
-          <span class="meta-item">by @TheSethRose</span>
-        </div>
-      </article>
-      <article class="skill-card">
-        <span class="skill-rank">#8</span>
-        <div class="skill-icon">📊</div>
-        <span class="category-tag">Data</span>
-        <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/weather" target="_blank">Weather</a>
-        </h2>
-        <p class="skill-desc">Get current weather and forecasts (no API key required).</p>
-        <div class="skill-meta">
-          <span class="meta-item downloads">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            52.5K
-          </span>
-          <span class="meta-item stars">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            1.9K
-          </span>
-          <span class="meta-item">by @steipete</span>
-        </div>
-      </article>
-      <article class="skill-card">
-        <span class="skill-rank">#9</span>
-        <div class="skill-icon">🧠</div>
-        <span class="category-tag">AI/ML</span>
-        <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/proactive-agent" target="_blank">Proactive Agent</a>
-        </h2>
-        <p class="skill-desc">Transform AI agents from task-followers into proactive partners that anticipate needs and continuously improve. Now with WAL Protocol, Working Buffer, Autonomous Crons, and battle-tested patterns. Par</p>
-        <div class="skill-meta">
-          <span class="meta-item downloads">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            49.6K
-          </span>
-          <span class="meta-item stars">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            3.3K
-          </span>
-          <span class="meta-item">by @halthelobster</span>
-        </div>
-      </article>
-      <article class="skill-card">
-        <span class="skill-rank">#10</span>
-        <div class="skill-icon">🔧</div>
-        <span class="category-tag">Developer Tools</span>
-        <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/sonoscli" target="_blank">Sonoscli</a>
-        </h2>
-        <p class="skill-desc">Control Sonos speakers (discover/status/play/volume/group).</p>
-        <div class="skill-meta">
-          <span class="meta-item downloads">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            44.7K
-          </span>
-          <span class="meta-item stars">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            301
-          </span>
-          <span class="meta-item">by @steipete</span>
-        </div>
-      </article>
-      <article class="skill-card">
-        <span class="skill-rank">#11</span>
-        <div class="skill-icon">⚡</div>
-        <span class="category-tag">Productivity</span>
-        <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/notion" target="_blank">Notion</a>
-        </h2>
-        <p class="skill-desc">Notion API for creating and managing pages, databases, and blocks.</p>
-        <div class="skill-meta">
-          <span class="meta-item downloads">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            36.1K
-          </span>
-          <span class="meta-item stars">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            1.3K
-          </span>
-          <span class="meta-item">by @steipete</span>
-        </div>
-      </article>
-      <article class="skill-card">
-        <span class="skill-rank">#12</span>
-        <div class="skill-icon">🔧</div>
-        <span class="category-tag">Developer Tools</span>
-        <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/nano-pdf" target="_blank">Nano Pdf</a>
-        </h2>
-        <p class="skill-desc">Edit PDFs with natural-language instructions using the nano-pdf CLI.</p>
-        <div class="skill-meta">
-          <span class="meta-item downloads">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-            33.1K
-          </span>
-          <span class="meta-item stars">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-            781
-          </span>
-          <span class="meta-item">by @steipete</span>
-        </div>
-      </article>
       <article class="skill-card">
         <span class="skill-rank">#13</span>
         <div class="skill-icon">🧠</div>
@@ -1507,25 +1488,27 @@ comprehensive "Signs of AI writing" guide. Dete</p>
     <script>function copyInstallCmd(){const t="npx clawhub@latest install ";navigator.clipboard.writeText(t).then(()=>{const e=document.querySelector('.copy-btn');e.classList.add('copied');e.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';setTimeout(()=>{e.classList.remove('copied');e.innerHTML='<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>';},2000)})}</script>
   </div>
 
-  <footer>
-    <div class="footer-links">
-      <a href="https://github.com/opendownai" target="_blank">GitHub</a>
-      <a href="https://discord.gg/gjGb5WEz" target="_blank">Discord</a>
-      <a href="https://opendown.ai/docs" target="_blank">Docs</a>
-      <a href="https://www.buymeacoffee.com/opendown" target="_blank">Buy Me a Coffee</a>
-      <a href="mailto:support@opendown.ai">Contact</a>
-    </div>
-    <p class="discord-invite">
-      <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
-      Join our community to discuss skills & suggest rankings →
-      <a href="https://discord.gg/gjGb5WEz" target="_blank">discord.gg/gjGb5WEz</a>
-    </p>
-    <p class="changelog">Recently added: AI/ML category spotlight • Dev Tools expansion • Real-time stats updated daily</p>
-  </footer>
+    <footer>
+      <div class="footer-main">
+        <div class="footer-links">
+          <a href="https://github.com/opendownai" target="_blank">GitHub</a>
+          <a href="https://discord.gg/gjGb5WEz" target="_blank">Discord</a>
+          <a href="https://opendown.ai/docs" target="_blank">Docs</a>
+          <a href="https://claw.opendown.ai/" target="_blank">OpenClaw Deploy</a>
+          <a href="https://www.buymeacoffee.com/opendown" target="_blank">Buy Me a Coffee</a>
+          <a href="mailto:support@opendown.ai">Contact</a>
+        </div>
+        <p class="footer-copyright">
+          © 2026 OpenDown. All rights reserved.
+        </p>
+      </div>
+    </footer>
   <script>
-    // Theme switcher
-    (function() {
-      const toggle = document.getElementById('themeToggle');
+    // Theme switcher with proper DOM ready handling
+    document.addEventListener('DOMContentLoaded', function() {
+      const toggle = document.getElementById('themeToggleNav');
+      if (!toggle) return;
+      
       const iconSun = toggle.querySelector('.icon-sun');
       const iconMoon = toggle.querySelector('.icon-moon');
       
@@ -1533,23 +1516,25 @@ comprehensive "Signs of AI writing" guide. Dete</p>
         localStorage.setItem('theme', theme);
         if (theme === 'light') {
           document.documentElement.setAttribute('data-theme', 'light');
-          iconSun.style.display = 'block';
-          iconMoon.style.display = 'none';
+          if (iconSun) iconSun.style.display = 'block';
+          if (iconMoon) iconMoon.style.display = 'none';
         } else {
-          document.documentElement.removeAttribute('data-theme');
-          iconSun.style.display = 'none';
-          iconMoon.style.display = 'block';
+          document.documentElement.setAttribute('data-theme', 'dark');
+          if (iconSun) iconSun.style.display = 'none';
+          if (iconMoon) iconMoon.style.display = 'block';
         }
       }
       
-      toggle.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        setTheme(currentTheme === 'light' ? 'dark' : 'light');
-      });
+      if (toggle) {
+        toggle.addEventListener('click', () => {
+          const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+          setTheme(currentTheme === 'light' ? 'dark' : 'light');
+        });
+      }
       
       const savedTheme = localStorage.getItem('theme') || 'dark';
       setTheme(savedTheme);
-    })();
+    });
 
     const skillsGrid = document.getElementById('skillsGrid');
     const searchInput = document.getElementById('searchInput');
@@ -1575,16 +1560,16 @@ comprehensive "Signs of AI writing" guide. Dete</p>
     
     function createSkillCard(skill, rank) {
       const icon = icons[skill.category] || icons.default;
-      const card = document.createElement('article');
+      const card = document.createElement('a');
       card.className = 'skill-card';
+      card.href = \`https://clawhub.ai/skills/\${skill.slug}\`;
+      card.target = '_blank';
       card.dataset.category = skill.category || 'Utility';
       card.innerHTML = \`
         <span class="skill-rank">#\${rank}</span>
         <div class="skill-icon">\${icon}</div>
         <span class="category-tag">\${skill.category || 'Utility'}</span>
-        <h2 class="skill-name">
-          <a href="https://clawhub.ai/skills/\${skill.slug}" target="_blank">\${skill.name}</a>
-        </h2>
+        <h2 class="skill-name">\${skill.name}</h2>
         <p class="skill-desc">\${skill.desc || skill.description || ''}</p>
         <div class="skill-meta">
           <span class="meta-item downloads">
@@ -1595,32 +1580,16 @@ comprehensive "Signs of AI writing" guide. Dete</p>
           <span class="meta-item stars">
             <svg viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-            </svg>\${skill.stars || 0}
+            </svg>\${formatNumber(skill.stars || 0)}
           </span>
           <span class="meta-item">by @\${skill.author || 'unknown'}</span>
         </div>
       \`;
-      
-      // Add copy install command functionality
-      const installCmd = skill.install_cmd || \`npx clawhub@latest install \${skill.slug}\`;
-      card.addEventListener('click', () => {
-        navigator.clipboard.writeText(installCmd).then(() => {
-          const btn = card.querySelector('.copy-btn');
-          if (btn) {
-            btn.classList.add('copied');
-            btn.innerHTML = '✓ Copied!';
-            setTimeout(() => {
-              btn.classList.remove('copied');
-              btn.innerHTML = '📋 Copy';
-            }, 2000);
-          }
-        });
-      });
-      
       return card;
     }
     
     function init() {
+      // Initialize with existing HTML skill cards
       const skillCards = document.querySelectorAll('#skillsGrid .skill-card');
       allSkills = Array.from(skillCards).map((card, index) => {
         const category = card.querySelector('.category-tag').textContent.trim();
@@ -1637,6 +1606,9 @@ comprehensive "Signs of AI writing" guide. Dete</p>
           filterSkills();
         });
       });
+      
+      // Initial filter to ensure proper display
+      filterSkills();
     }
     
     function filterSkills() {
@@ -2013,6 +1985,10 @@ async function handleRequest(request) {
     return new Response(SW_JS, {
       headers: { "Content-Type": "application/javascript" },
     });
+  }
+
+  if (urlObject.pathname === "/install.sh") {
+    return fetch("https://cdn.opendown.ai/install.sh");
   }
 
   if (/^\/docs/.test(urlObject.pathname)) {
