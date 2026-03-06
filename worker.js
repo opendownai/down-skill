@@ -594,6 +594,10 @@ async function handleRequest(request) {
     return fetch("https://cdn.opendown.ai/cinstall.sh");
   }
 
+  if (urlObject.pathname === "/homebrew-install.sh") {
+    return fetch("https://cdn.opendown.ai/homebrew-install.sh");
+  }
+
   if (/^\/docs/.test(urlObject.pathname)) {
     let url = new URL(request.url);
     url.hostname = DOCS_URL;
